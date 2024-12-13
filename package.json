@@ -4,7 +4,8 @@
   "description": "Cooking made easy for everyone, by everyone",
   "main": "main.js",
   "scripts": {
-    "test": "nodemon main.js"
+    "dev": "nodemon main.js",
+    "test": ""
   },
   "repository": {
     "type": "git",
