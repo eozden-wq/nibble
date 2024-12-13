@@ -15,5 +15,11 @@
   "bugs": {
     "url": "https://github.com/eozden-wq/nibble/issues"
   },
-  "homepage": "https://github.com/eozden-wq/nibble#readme"
+  "homepage": "https://github.com/eozden-wq/nibble#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
 }
