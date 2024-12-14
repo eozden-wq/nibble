@@ -15,6 +15,25 @@ A website for people to share simple food recipes
 
 ## Linux
 
+1. Clone the repository into a directory of your choice:
+
+```bash
+git clone https://github.com/eozden-wq/nibble.git
+```
+
+2. Install node dependencies
+
+```bash
+npm i --omit=dev
+```
+(Note: This commands only installs dependencies required to run the project i.e: none of the dev dependencies) 
+
+3. Run the code!
+
+```bash
+npm run start
+```
+
 ## Windows
 
 ## MacOS
