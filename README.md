@@ -53,3 +53,5 @@ This project is licensed under the MIT license - see the [LICENSE](LICENSE) file
 This project uses the following third-party libraries:
 
 - [ExpressJS](https://github.com/expressjs/express/blob/master/LICENSE) (MIT License)
+- [swagger-ui-express](https://github.com/scottie1984/swagger-ui-express/blob/master/LICENSE) (MIT License)
+- [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc/blob/master/LICENSE) (MIT License)
