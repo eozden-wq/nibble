@@ -12,16 +12,14 @@ const swaggerJsDoc = require('swagger-jsdoc');
 
 const swaggerOptions = {
   swaggerDefinition: {
-    nibble_api: '3.0.0',
+    swagger: '2.0',
     info: {
       title: "NibbleAPI",
       version: '1.0.0',
       description: 'API documentation for Nibble API',
     },
-    servers: [
-    ],
   },
-  apis: ['./routes/*.js'], // API routes are all contained in the routes/ directory
+  apis: ['./server/routes/*.js'], // API routes are all contained in the routes/ directory
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
