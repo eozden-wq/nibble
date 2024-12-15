@@ -70,12 +70,12 @@ function error_response(code, message) {
 router.get('/get', (req, res) => {
     try {
         data = serializer.read(req.query.recipe_id);
-        res.json(data);
         res.status(200);
+        res.json(data);
         res.end();
     } catch (err) {
-        res.json(error_response(400, "Malformed request"));
         res.status(400);
+        res.json(error_response(400, "Malformed request"));
         res.end();
     }
 });
