@@ -8,7 +8,7 @@
 
 const fs = require('fs');
 
-class RecipeSerializer {
+class RecipeStreamer {
     constructor(data_file) {
         this.data = []; 
         fs.readFile(data_file, (err, data) => {
@@ -38,4 +38,4 @@ class RecipeSerializer {
     }
 }
 
-module.exports = RecipeSerializer;
+module.exports = RecipeStreamer;

@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const RecipeSerializer = require('../core/RecipeSerializer');
+const RecipeSerializer = require('../core/RecipeStreamer');
 
-let serializer = new RecipeSerializer("./server/data/recipes.json");
+let streamer = new RecipeSerializer("./server/data/recipes.json");
 
 function error_response(code, message) {
     return {"code": code, "message": message};
@@ -69,7 +69,7 @@ function error_response(code, message) {
 */
 router.get('/get', (req, res) => {
     try {
-        data = serializer.read(req.query.recipe_id);
+        data = streamer.read(req.query.recipe_id);
         res.status(200);
         res.json(data);
     } catch (err) {
