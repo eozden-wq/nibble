@@ -7,32 +7,46 @@
  */
 
 const fs = require('fs');
+const Recipe = require("./Recipe");
 
 class RecipeStreamer {
     constructor(data_file) {
-        this.data = []; 
+        this.data_file = data_file;
+        this.data = [];
         fs.readFile(data_file, (err, data) => {
             if (err) throw err;
 
             this.data = JSON.parse(data);
         });
-    };   
-    
+    };
+
+    /**
+     * Reads the recipe with given id
+     */
     read(id) {
         try {
             if (typeof this.data[id] === 'undefined') {
-                throw err;
+                throw TypeError;
             }
             return this.data[id]
         } catch (err) {
             throw err;
         }
     }
-    
-    write() {
-        // TODO
+
+    write(recipe) {
+        try {
+            if (!(recipe instanceof Recipe)) {
+                throw TypeError
+            }
+            recipe.id = this.data.length;
+            this.data.push(recipe);
+            fs.writeFileSync(this.data_file, JSON.stringify(this.data));
+        } catch (err) {
+            throw err;
+        }
     }
-    
+
     edit(id) {
         // TODO
     }

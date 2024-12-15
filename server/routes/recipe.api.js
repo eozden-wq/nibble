@@ -1,12 +1,16 @@
 const express = require('express');
 const router = express.Router();
+
 const RecipeSerializer = require('../core/RecipeStreamer');
+const Recipe = require('../core/Recipe');
 
 let streamer = new RecipeSerializer("./server/data/recipes.json");
 
-function error_response(code, message) {
-    return {"code": code, "message": message};
+function json_response(code, message) {
+    return { "code": code, "message": message };
 }
+
+router.use(express.json());
 
 /**
  * @swagger
@@ -74,7 +78,19 @@ router.get('/get', (req, res) => {
         res.json(data);
     } catch (err) {
         res.status(400);
-        res.json(error_response(400, "Malformed request"));
+        res.json(json_response(400, "Malformed request"));
+    }
+    res.end();
+});
+
+router.post('/create', (req, res) => {
+    try {
+        let recipe = new Recipe(req.body);
+        streamer.write(recipe);
+        res.json(json_response(200, "Success"));
+    } catch (err) {
+        res.status(400);
+        res.json(json_response(400, "Malformed request"));
     }
     res.end();
 });
