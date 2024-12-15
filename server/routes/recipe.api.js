@@ -1,5 +1,8 @@
-const express = require('express');;
+const express = require('express');
 const router = express.Router();
+const RecipeSerializer = require('../core/RecipeSerializer');
+
+let serializer = new RecipeSerializer("./server/data/recipes.json");
 
 /**
  * @swagger
@@ -39,7 +42,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/recipes/get:
+ * /api/recipe/get:
  *  get:
  *      parameters:
  *        - in: query
@@ -61,7 +64,16 @@ const router = express.Router();
  *                          
 */
 router.get('/get', (req, res) => {
-    res.send('test');
+    try {
+        data = serializer.read(req.query.recipe_id);
+        res.json(data);
+        res.status(200);
+        res.end();
+    } catch (err) {
+        res.status(400);
+        res.send("Bad request");
+        res.end();
+    }
 });
 
 module.exports = router;

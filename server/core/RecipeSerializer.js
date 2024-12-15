@@ -25,7 +25,6 @@ class RecipeSerializer {
             }
             return this.data[id]
         } catch (err) {
-            console.log("hit");
             throw err;
         }
     }
