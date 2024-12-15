@@ -72,12 +72,11 @@ router.get('/get', (req, res) => {
         data = serializer.read(req.query.recipe_id);
         res.status(200);
         res.json(data);
-        res.end();
     } catch (err) {
         res.status(400);
         res.json(error_response(400, "Malformed request"));
-        res.end();
     }
+    res.end();
 });
 
 module.exports = router;
