@@ -10,7 +10,7 @@ const fs = require('fs');
 
 class RecipeSerializer {
     constructor(data_file) {
-        this.data = "";
+        this.data = []; 
         fs.readFile(data_file, (err, data) => {
             if (err) throw err;
 
@@ -18,16 +18,24 @@ class RecipeSerializer {
         });
     };   
     
-    read() {
-        
+    read(id) {
+        try {
+            if (typeof this.data[id] === 'undefined') {
+                throw err;
+            }
+            return this.data[id]
+        } catch (err) {
+            console.log("hit");
+            throw err;
+        }
     }
     
     write() {
-        
+        // TODO
     }
     
     edit(id) {
-
+        // TODO
     }
 }
 
