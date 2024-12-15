@@ -4,6 +4,10 @@ const RecipeSerializer = require('../core/RecipeSerializer');
 
 let serializer = new RecipeSerializer("./server/data/recipes.json");
 
+function error_response(code, message) {
+    return {"code": code, "message": message};
+}
+
 /**
  * @swagger
  *definitions:
@@ -70,8 +74,8 @@ router.get('/get', (req, res) => {
         res.status(200);
         res.end();
     } catch (err) {
+        res.json(error_response(400, "Malformed request"));
         res.status(400);
-        res.send("Bad request");
         res.end();
     }
 });
