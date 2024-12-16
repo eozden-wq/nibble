@@ -35,7 +35,7 @@ router.use(express.json());
  *            instructions:
  *                type: string
  *                description: Instructions on how to make the dish
- *    Error:
+ *    Response:
  *        type: object
  *        required:
  *          - code
@@ -68,7 +68,7 @@ router.use(express.json());
  *          "400":
  *              description: An invalid ID has been passed as a query parameter
  *              schema:
- *                  $ref: "#/definitions/Error"
+ *                  $ref: "#/definitions/Response"
  *                          
 */
 router.get('/get', (req, res) => {
@@ -105,7 +105,7 @@ router.get('/get', (req, res) => {
  *                  properties:
  *                      code:
  *                          type: integer
- *                          exampe: 400
+ *                          example: 400
  *                      message:
  *                          type: string
  *                          example: "Malformed request" 
