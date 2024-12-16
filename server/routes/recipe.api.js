@@ -7,7 +7,10 @@ const Recipe = require('../core/Recipe');
 let streamer = new RecipeSerializer("./server/data/recipes.json");
 
 function json_response(code, message) {
-    return { "code": code, "message": message };
+    return {
+        "code": code,
+        "message": message
+    };
 }
 
 router.use(express.json());
@@ -70,7 +73,7 @@ router.use(express.json());
  *              schema:
  *                  $ref: "#/definitions/Response"
  *                          
-*/
+ */
 router.get('/get', (req, res) => {
     try {
         data = streamer.read(req.query.recipe_id);
@@ -132,6 +135,21 @@ router.post('/create', (req, res) => {
         let recipe = new Recipe(req.body);
         streamer.write(recipe);
         res.json(json_response(200, "Success"));
+    } catch (err) {
+        res.status(400);
+        res.json(json_response(400, "Malformed request"));
+    }
+    res.end();
+});
+
+
+router.get('/search', (req, res) => {
+    try {
+        if (typeof req.query.dish_name === 'undefined') {
+            throw TypeError;
+        }
+        res.status(200);
+        res.json(streamer.search(req.query.dish_name));
     } catch (err) {
         res.status(400);
         res.json(json_response(400, "Malformed request"));

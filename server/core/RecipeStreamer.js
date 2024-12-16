@@ -51,22 +51,25 @@ class RecipeStreamer {
     edit(id) {
         // TODO
     }
-    
+
     search(key) {
         const options = {
             includeScore: true,
             keys: ['dish_name']
         };
-        
+
         const fuse = new Fuse(this.data, options)
 
         const search_result = fuse.search(key);
         let results = []
-        
+
         search_result.forEach((element) => {
-            if (element["score"] > 0.2) { results.append(element["item"])}
+            if (element["score"] > 0.2) {
+                results.append(element["item"]);
+            }
         });
 
+        return results;
     }
 }
 
