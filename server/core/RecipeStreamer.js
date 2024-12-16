@@ -50,6 +50,10 @@ class RecipeStreamer {
     edit(id) {
         // TODO
     }
+    
+    search(key) {
+        
+    }
 }
 
 module.exports = RecipeStreamer;
