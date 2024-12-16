@@ -26,8 +26,9 @@
     "supertest": "^7.0.0"
   },
   "dependencies": {
+    "express": "^4.21.2",
+    "fuse.js": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "express": "^4.21.2"
+    "swagger-ui-express": "^5.0.1"
   }
 }
