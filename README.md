@@ -40,7 +40,17 @@ npm run start
 
 # Testing
 
-TODO
+To run all written tests, simply run:
+
+```bash
+npm run test
+```
+
+If you want to continuously run tests, run:
+
+```bash
+npm run test:watch
+```
 
 # Reviewing My Code
 
