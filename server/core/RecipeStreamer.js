@@ -8,6 +8,7 @@
 
 const fs = require('fs');
 const Recipe = require("./Recipe");
+const Fuse = require('fuse.js');
 
 class RecipeStreamer {
     constructor(data_file) {
@@ -52,7 +53,20 @@ class RecipeStreamer {
     }
     
     search(key) {
+        const options = {
+            includeScore: true,
+            keys: ['dish_name']
+        };
         
+        const fuse = new Fuse(this.data, options)
+
+        const search_result = fuse.search(key);
+        let results = []
+        
+        search_result.forEach((element) => {
+            if (element["score"] > 0.2) { results.append(element["item"])}
+        });
+
     }
 }
 
