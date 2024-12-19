@@ -145,8 +145,8 @@ router.post('/create', (req, res) => {
 /**
  * @swagger
  *  /api/recipe/search:
- *      summary: search recipes by key in a certain field
  *      get:
+ *          summary: search recipes by key in a certain field
  *          parameters:
  *              - in: query
  *                name: key
@@ -177,7 +177,6 @@ router.post('/create', (req, res) => {
  *                          message:
  *                              type: string
  *                              example: "Malformed request" 
- 
  */
 router.get('/search', (req, res) => {
     try {
