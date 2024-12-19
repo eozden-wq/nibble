@@ -27,6 +27,12 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(express.static('client'));
 
+/**
+ * Bootstrap - css and js related to bootstrap can be accessed from the css_bin and js_bin route
+ */
+app.use('/css_bin', express.static('node_modules/bootstrap/dist/css'))
+app.use('/js_bin', express.static('node_modules/bootstrap/dist/js'))
+
 app.get('/', (req, res) => {
   res.sendFile('index.html');
 });
