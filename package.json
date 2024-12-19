@@ -4,6 +4,7 @@
   "description": "Cooking made easy for everyone, by everyone",
   "main": "main.js",
   "scripts": {
+    "start": "node main.js",
     "dev": "nodemon main.js",
     "test": "jest",
     "test:watch": "jest --watch"
