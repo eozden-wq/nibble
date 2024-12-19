@@ -32,12 +32,15 @@ router.use(express.json());
  *            author:
  *                type: string
  *                description: Name of the author of the recipe
+ *                example: Gordon Ramsay
  *            dish_name:
  *                type: string
  *                description: Name of the dish
+ *                example: Sticky Toffee Pudding
  *            instructions:
  *                type: string
  *                description: Instructions on how to make the dish
+ *                example: 1. Make toffee 2. Make pudding 3. Make it sticky 4. ??? 5. Profit
  *    Response:
  *        type: object
  *        required:
