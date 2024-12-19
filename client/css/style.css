@@ -7,3 +7,7 @@ body {
 .landing {
   height: 100%;
 }
+
+h1, p {
+  font-family: 'Roboto';
+}
