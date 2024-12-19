@@ -32,12 +32,15 @@ router.use(express.json());
  *            author:
  *                type: string
  *                description: Name of the author of the recipe
+ *                example: Gordon Ramsay
  *            dish_name:
  *                type: string
  *                description: Name of the dish
+ *                example: Sticky Toffee Pudding
  *            instructions:
  *                type: string
  *                description: Instructions on how to make the dish
+ *                example: 1. Make toffee 2. Make pudding 3. Make it sticky 4. ??? 5. Profit
  *    Response:
  *        type: object
  *        required:
@@ -76,7 +79,7 @@ router.use(express.json());
  */
 router.get('/get', (req, res) => {
     try {
-        data = streamer.read(req.query.recipe_id);
+        let data = streamer.read(req.query.recipe_id);
         res.status(200);
         res.json(data);
     } catch (err) {
@@ -86,6 +89,84 @@ router.get('/get', (req, res) => {
     res.end();
 });
 
+/**
+ * @swagger
+ *  /api/recipe/random:
+ *      get:
+ *          summary: Get a random recipe from the recipes
+ *          responses:
+ *              "200":
+ *                  description: A random stored recipe 
+ *                  schema:
+ *                      $ref: '#/definitions/Recipe'
+ *              "500":
+ *                  description: An internal server error has occurred
+ *                  schema:
+ *                      $ref: '#/definitions/Response'
+ */
+router.get('/random', (req, res) => {
+    try {
+        let data = streamer.read(Math.floor(Math.random() * streamer.get_size()));
+        res.status(200);
+        res.json(data);
+    } catch (err) {
+        res.status(500);
+        res.json(json_response(500, "Internal Server Error"));
+    }
+    res.end();
+});
+
+/**
+ * @swagger
+ *  /api/recipe/search:
+ *      get:
+ *          summary: search recipes by key in a certain field
+ *          parameters:
+ *              - in: query
+ *                name: key
+ *                schema:
+ *                   type: string
+ *                required: true
+ *                description: The string that is going to be searched for
+ *              - in: query
+ *                name: field
+ *                schema:
+ *                  type: string
+ *                required: true
+ *                description: The field of a joke that the key is going to be searched in
+ *          responses:
+ *              "200":
+ *                  description: Array of recipes that the search has matched
+ *                  schema:
+ *                      type: array
+ *                      items:
+ *                          $ref: '#/definitions/Recipe'
+ *              "400":
+ *                  description: Either key or field is undefined or does not exist
+ *                  schema:
+ *                      properties:
+ *                          code:
+ *                              type: integer
+ *                              example: 400
+ *                          message:
+ *                              type: string
+ *                              example: "Malformed request" 
+ */
+router.get('/search', (req, res) => {
+    try {
+        if (typeof req.query.key === 'undefined' || typeof req.query.field === 'undefined') {
+            throw TypeError;
+        }
+        res.status(200);
+        res.json(streamer.search(req.query.field, req.query.key));
+    } catch (err) {
+        res.status(400);
+        res.json(json_response(400, "Malformed request"));
+    }
+    res.end();
+});
+
+ 
 /**
  * @swagger
  * /api/recipe/create:
@@ -142,54 +223,5 @@ router.post('/create', (req, res) => {
     res.end();
 });
 
-/**
- * @swagger
- *  /api/recipe/search:
- *      get:
- *          summary: search recipes by key in a certain field
- *          parameters:
- *              - in: query
- *                name: key
- *                schema:
- *                   type: string
- *                required: true
- *                description: The string that is going to be searched for
- *              - in: query
- *                name: field
- *                schema:
- *                  type: string
- *                required: true
- *                description: The field of a joke that the key is going to be searched in
- *          responses:
- *              "200":
- *                  description: Array of recipes that the search has matched
- *                  schema:
- *                      type: array
- *                      items:
- *                          $ref: '#/definitions/Recipe'
- *              "400":
- *                  description: Either key or field is undefined or does not exist
- *                  schema:
- *                      properties:
- *                          code:
- *                              type: integer
- *                              example: 400
- *                          message:
- *                              type: string
- *                              example: "Malformed request" 
- */
-router.get('/search', (req, res) => {
-    try {
-        if (typeof req.query.key === 'undefined' || typeof req.query.field === 'undefined') {
-            throw TypeError;
-        }
-        res.status(200);
-        res.json(streamer.search(req.query.field, req.query.key));
-    } catch (err) {
-        res.status(400);
-        res.json(json_response(400, "Malformed request"));
-    }
-    res.end();
-});
 
 module.exports = router;
