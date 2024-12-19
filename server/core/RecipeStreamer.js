@@ -64,9 +64,7 @@ class RecipeStreamer {
         let results = []
 
         search_result.forEach((element) => {
-            if (element["score"] > 0.2) {
-                results.append(element["item"]);
-            }
+            results.push(element["item"]);
         });
 
         return results;
