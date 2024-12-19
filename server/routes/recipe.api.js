@@ -145,11 +145,11 @@ router.post('/create', (req, res) => {
 
 router.get('/search', (req, res) => {
     try {
-        if (typeof req.query.dish_name === 'undefined') {
+        if (typeof req.query.key === 'undefined' || typeof req.query.field === 'undefined') {
             throw TypeError;
         }
         res.status(200);
-        res.json(streamer.search(req.query.dish_name));
+        res.json(streamer.search(req.query.field, req.query.key));
     } catch (err) {
         res.status(400);
         res.json(json_response(400, "Malformed request"));

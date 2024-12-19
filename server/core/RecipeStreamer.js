@@ -52,10 +52,10 @@ class RecipeStreamer {
         // TODO
     }
 
-    search(key) {
+    search(field, key) {
         const options = {
             includeScore: true,
-            keys: ['dish_name']
+            keys: [field]
         };
 
         const fuse = new Fuse(this.data, options)
