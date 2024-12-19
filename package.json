@@ -26,6 +26,7 @@
     "supertest": "^7.0.0"
   },
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "express": "^4.21.2",
     "fuse.js": "^7.0.0",
     "swagger-jsdoc": "^6.2.8",
