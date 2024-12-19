@@ -69,6 +69,10 @@ class RecipeStreamer {
 
         return results;
     }
+    
+    get_size() {
+        return this.data.length;
+    }
 }
 
 module.exports = RecipeStreamer;

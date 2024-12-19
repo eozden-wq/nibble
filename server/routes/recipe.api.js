@@ -76,7 +76,7 @@ router.use(express.json());
  */
 router.get('/get', (req, res) => {
     try {
-        data = streamer.read(req.query.recipe_id);
+        let data = streamer.read(req.query.recipe_id);
         res.status(200);
         res.json(data);
     } catch (err) {
@@ -86,55 +86,11 @@ router.get('/get', (req, res) => {
     res.end();
 });
 
-/**
- * @swagger
- * /api/recipe/create:
- *  post:
- *      summary: Create a new recipe for people to view
- *      responses:
- *          "200":
- *              description: The recipe was successfully created
- *              schema:
- *                  properties:
- *                      code:
- *                          type: integer
- *                          example: 200
- *                      message:
- *                          type: string
- *                          example: "Success"
- *          "400":
- *              description: The recipe was not created due to the parameters not being given correctly
- *              schema:
- *                  properties:
- *                      code:
- *                          type: integer
- *                          example: 400
- *                      message:
- *                          type: string
- *                          example: "Malformed request" 
- *      parameters:
- *        - in: body
- *          name: recipe
- *          description: The recipe to be created
- *          schema:
- *              type: object
- *              required:
- *                  - author
- *                  - dish_name
- *                  - instructions
- *              properties:
- *                  author:
- *                      type: string
- *                  dish_name:
- *                      type: string
- *                  instructions:
- *                      type: string
- */
-router.post('/create', (req, res) => {
+router.get('/random', (req, res) => {
     try {
-        let recipe = new Recipe(req.body);
-        streamer.write(recipe);
-        res.json(json_response(200, "Success"));
+        let data = streamer.read(Math.floor(Math.random() * streamer.get_size()));
+        res.status(200);
+        res.json(data);
     } catch (err) {
         res.status(400);
         res.json(json_response(400, "Malformed request"));
@@ -191,5 +147,63 @@ router.get('/search', (req, res) => {
     }
     res.end();
 });
+
+ 
+/**
+ * @swagger
+ * /api/recipe/create:
+ *  post:
+ *      summary: Create a new recipe for people to view
+ *      responses:
+ *          "200":
+ *              description: The recipe was successfully created
+ *              schema:
+ *                  properties:
+ *                      code:
+ *                          type: integer
+ *                          example: 200
+ *                      message:
+ *                          type: string
+ *                          example: "Success"
+ *          "400":
+ *              description: The recipe was not created due to the parameters not being given correctly
+ *              schema:
+ *                  properties:
+ *                      code:
+ *                          type: integer
+ *                          example: 400
+ *                      message:
+ *                          type: string
+ *                          example: "Malformed request" 
+ *      parameters:
+ *        - in: body
+ *          name: recipe
+ *          description: The recipe to be created
+ *          schema:
+ *              type: object
+ *              required:
+ *                  - author
+ *                  - dish_name
+ *                  - instructions
+ *              properties:
+ *                  author:
+ *                      type: string
+ *                  dish_name:
+ *                      type: string
+ *                  instructions:
+ *                      type: string
+ */
+router.post('/create', (req, res) => {
+    try {
+        let recipe = new Recipe(req.body);
+        streamer.write(recipe);
+        res.json(json_response(200, "Success"));
+    } catch (err) {
+        res.status(400);
+        res.json(json_response(400, "Malformed request"));
+    }
+    res.end();
+});
+
 
 module.exports = router;
