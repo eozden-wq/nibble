@@ -142,7 +142,43 @@ router.post('/create', (req, res) => {
     res.end();
 });
 
-
+/**
+ * @swagger
+ *  /api/recipe/search:
+ *      summary: search recipes by key in a certain field
+ *      get:
+ *          parameters:
+ *              - in: query
+ *                name: key
+ *                schema:
+ *                   type: string
+ *                required: true
+ *                description: The string that is going to be searched for
+ *              - in: query
+ *                name: field
+ *                schema:
+ *                  type: string
+ *                required: true
+ *                description: The field of a joke that the key is going to be searched in
+ *          responses:
+ *              "200":
+ *                  description: Array of recipes that the search has matched
+ *                  schema:
+ *                      type: array
+ *                      items:
+ *                          $ref: '#/definitions/Recipe'
+ *              "400":
+ *                  description: Either key or field is undefined or does not exist
+ *                  schema:
+ *                      properties:
+ *                          code:
+ *                              type: integer
+ *                              example: 400
+ *                          message:
+ *                              type: string
+ *                              example: "Malformed request" 
+ 
+ */
 router.get('/search', (req, res) => {
     try {
         if (typeof req.query.key === 'undefined' || typeof req.query.field === 'undefined') {
