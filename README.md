@@ -65,3 +65,4 @@ This project uses the following third-party libraries:
 - [ExpressJS](https://github.com/expressjs/express/blob/master/LICENSE) (MIT License)
 - [swagger-ui-express](https://github.com/scottie1984/swagger-ui-express/blob/master/LICENSE) (MIT License)
 - [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc/blob/master/LICENSE) (MIT License)
+- [Fuse.js](https://github.com/krisk/Fuse/blob/main/LICENSE) (Apache License 2.0)
