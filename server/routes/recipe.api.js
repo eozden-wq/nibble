@@ -86,14 +86,29 @@ router.get('/get', (req, res) => {
     res.end();
 });
 
+/**
+ * @swagger
+ *  /api/recipe/random:
+ *      get:
+ *          summary: Get a random recipe from the recipes
+ *          responses:
+ *              "200":
+ *                  description: A random stored recipe 
+ *                  schema:
+ *                      $ref: '#/definitions/Recipe'
+ *              "500":
+ *                  description: An internal server error has occurred
+ *                  schema:
+ *                      $ref: '#/definitions/Response'
+ */
 router.get('/random', (req, res) => {
     try {
         let data = streamer.read(Math.floor(Math.random() * streamer.get_size()));
         res.status(200);
         res.json(data);
     } catch (err) {
-        res.status(400);
-        res.json(json_response(400, "Malformed request"));
+        res.status(500);
+        res.json(json_response(500, "Internal Server Error"));
     }
     res.end();
 });
