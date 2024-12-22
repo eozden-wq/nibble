@@ -8,3 +8,8 @@ body {
 .landing {
   height: 100%;
 }
+
+.navbar-nav > li{
+  padding-left: 2.5em;
+  padding-right: 2.5em;
+}
