@@ -36,16 +36,21 @@
             </button>
             <div class="collapse navbar-collapse justify-content-center align-items-center" id="navbarText">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active"><button class="nav-link">Random Recipe</button></li>
-                    <li class="nav-item"><button href="" class="nav-link">Search for a recipe</button></li>
-                    <li class="nav-item"><button href="" class="nav-link">Create a Recipe</a></li>
+                    <li class="nav-item active"><button  onclick="switch_view(random_view)" class="nav-link">Random Recipe</button></li>
+                    <li class="nav-item"><button onclick="switch_view(search_view)" class="nav-link">Search for a recipe</button></li>
+                    <li class="nav-item"><button onclick="switch_view(create_view)" class="nav-link">Create a Recipe</a></li>
                 </ul>
             </div>
         </nav>
-        <div class="random-view">
+        <div id="random_view">
+            <h1>Hello 1</h1>
         </div>
-        <div class="search-view" style="display:none"></div>
-        <div class="create-view" style="display:none"></div>
+        <div id="search_view" style="display:none">
+            <h1>Hello 2</h1>
+        </div>
+        <div id="create_view" style="display:none">
+            <h1>Hello 3</h1>
+        </div>
     </div>
 
     <script src="/js/script.js"></script>
