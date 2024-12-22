@@ -2,12 +2,9 @@ html,
 body {
   height: 100%;
   width: 100%;
+  font-family: 'Roboto', sans-serif;
 }
 
 .landing {
   height: 100%;
-}
-
-h1, p {
-  font-family: 'Roboto';
 }
