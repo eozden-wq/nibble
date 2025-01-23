@@ -6,6 +6,8 @@ const Recipe = require('../core/Recipe');
 
 let streamer = new RecipeSerializer("./server/data/recipes.json");
 
+const multer = require('multer');
+
 function json_response(code, message) {
     return {
         "code": code,
