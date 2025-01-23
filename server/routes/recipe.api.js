@@ -17,7 +17,8 @@ const yup = require('yup');
 const createRecipeSchema = yup.object().shape({
     dish_name: yup.string().required('Dish name is required'),
     author: yup.string().required('Author of the recipe is required'),
-    instructions: yup.array().of(yup.string().required('Instruction can\'t be empty')).required('Instructions are required')
+    instructions: yup.array().of(yup.string().required('Instruction can\'t be empty')).required('Instructions are required'),
+    ingredients: yup.array().of(yup.string().required('Ingredients can\'t be empty')).required('Instructions are required')
 });
 
 router.use(express.json());

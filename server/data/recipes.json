@@ -1,8 +1,205 @@
 [
-    {
-        "id": 0,
-        "author": "Huseyin Emre Ozden",
-        "dish_name": "Happiness on a plate",
-        "instructions": "1. be born 2. ??? 3. profit"
-    }
+  {
+    "id": 0,
+    "author": "Alice Johnson",
+    "dish_name": "Creamy Chicken Alfredo",
+    "instructions": [
+      "Boil fettuccine until al dente.",
+      "Sauté garlic in butter, then add heavy cream.",
+      "Stir in grated parmesan cheese until sauce thickens.",
+      "Add cooked chicken and combine with pasta.",
+      "Season with salt and pepper before serving."
+    ],
+    "ingredients": [
+      "fettuccine pasta",
+      "chicken breast",
+      "heavy cream",
+      "garlic",
+      "parmesan cheese",
+      "salt",
+      "pepper"
+    ]
+  },
+  {
+    "id": 1,
+    "author": "Bob Smith",
+    "dish_name": "Spaghetti Bolognese",
+    "instructions": [
+      "Heat olive oil in a pan and sauté onions until translucent.",
+      "Add ground beef and cook until browned.",
+      "Stir in tomato sauce and simmer for 15 minutes.",
+      "Boil spaghetti in salted water until al dente.",
+      "Serve sauce over spaghetti and top with grated cheese."
+    ],
+    "ingredients": [
+      "spaghetti",
+      "ground beef",
+      "tomato sauce",
+      "onion",
+      "olive oil",
+      "cheese"
+    ]
+  },
+  {
+    "id": 2,
+    "author": "Charlie Davis",
+    "dish_name": "Classic Margherita Pizza",
+    "instructions": [
+      "Preheat oven to 475°F (245°C).",
+      "Roll out pizza dough on a floured surface.",
+      "Spread tomato sauce evenly over dough.",
+      "Top with fresh mozzarella and basil leaves.",
+      "Bake for 10-12 minutes until crust is golden."
+    ],
+    "ingredients": [
+      "pizza dough",
+      "tomato sauce",
+      "fresh mozzarella",
+      "basil leaves",
+      "olive oil"
+    ]
+  },
+  {
+    "id": 3,
+    "author": "Diana Brown",
+    "dish_name": "Beef Tacos",
+    "instructions": [
+      "Cook ground beef in a skillet until browned.",
+      "Add taco seasoning and a splash of water.",
+      "Simmer for 5 minutes to let flavors meld.",
+      "Warm tortillas in a separate pan.",
+      "Fill tortillas with beef, lettuce, cheese, and salsa."
+    ],
+    "ingredients": [
+      "ground beef",
+      "taco seasoning",
+      "tortillas",
+      "lettuce",
+      "cheese",
+      "salsa"
+    ]
+  },
+  {
+    "id": 4,
+    "author": "Emily Harris",
+    "dish_name": "Vegetable Stir-Fry",
+    "instructions": [
+      "Heat oil in a wok or large pan.",
+      "Sauté garlic and ginger until fragrant.",
+      "Add mixed vegetables and stir-fry for 3-5 minutes.",
+      "Stir in soy sauce and a pinch of sugar.",
+      "Serve hot over steamed rice."
+    ],
+    "ingredients": [
+      "garlic",
+      "ginger",
+      "mixed vegetables",
+      "soy sauce",
+      "sugar",
+      "rice"
+    ]
+  },
+  {
+    "id": 5,
+    "author": "Frank White",
+    "dish_name": "Lemon Garlic Salmon",
+    "instructions": [
+      "Preheat oven to 400°F (200°C).",
+      "Place salmon fillets on a foil-lined baking sheet.",
+      "Mix melted butter with minced garlic and lemon juice.",
+      "Brush mixture onto salmon and season with salt and pepper.",
+      "Bake for 12-15 minutes until salmon flakes easily."
+    ],
+    "ingredients": [
+      "salmon fillets",
+      "butter",
+      "garlic",
+      "lemon",
+      "salt",
+      "pepper"
+    ]
+  },
+  {
+    "id": 6,
+    "author": "George Roberts",
+    "dish_name": "Chicken Fajitas",
+    "instructions": [
+      "Slice chicken, bell peppers, and onions.",
+      "Season chicken with fajita seasoning.",
+      "Sauté chicken in a hot skillet until nearly cooked through.",
+      "Add vegetables and cook until tender.",
+      "Serve with warm tortillas, sour cream, and salsa."
+    ],
+    "ingredients": [
+      "chicken",
+      "bell peppers",
+      "onions",
+      "fajita seasoning",
+      "tortillas",
+      "sour cream",
+      "salsa"
+    ]
+  },
+  {
+    "id": 7,
+    "author": "Helen Clark",
+    "dish_name": "Chocolate Chip Cookies",
+    "instructions": [
+      "Preheat oven to 350°F (175°C).",
+      "Cream butter and sugar in a mixing bowl.",
+      "Beat in eggs and vanilla extract.",
+      "Stir in flour, baking soda, and chocolate chips.",
+      "Drop spoonfuls of dough onto a baking sheet and bake for 10-12 minutes."
+    ],
+    "ingredients": [
+      "butter",
+      "sugar",
+      "eggs",
+      "vanilla extract",
+      "flour",
+      "baking soda",
+      "chocolate chips"
+    ]
+  },
+  {
+    "id": 8,
+    "author": "Ian Martinez",
+    "dish_name": "Greek Salad",
+    "instructions": [
+      "Chop tomatoes, cucumbers, and red onion.",
+      "Combine in a bowl with olives and feta cheese.",
+      "Drizzle with olive oil and red wine vinegar.",
+      "Season with salt, pepper, and oregano.",
+      "Toss gently and serve chilled."
+    ],
+    "ingredients": [
+      "tomatoes",
+      "cucumbers",
+      "red onion",
+      "olives",
+      "feta cheese",
+      "olive oil",
+      "red wine vinegar"
+    ]
+  },
+  {
+    "id": 9,
+    "author": "James Wilson",
+    "dish_name": "Avocado Toast",
+    "instructions": [
+      "Toast bread slices until golden.",
+      "Mash ripe avocados in a bowl with salt and pepper.",
+      "Spread avocado mixture onto toast.",
+      "Add optional toppings like cherry tomatoes or a fried egg.",
+      "Serve immediately."
+    ],
+    "ingredients": [
+      "bread",
+      "avocados",
+      "salt",
+      "pepper",
+      "cherry tomatoes",
+      "eggs"
+    ]
+  }
 ]
