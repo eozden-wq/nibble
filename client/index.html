@@ -36,21 +36,40 @@
             </button>
             <div class="collapse navbar-collapse justify-content-center align-items-center" id="navbarText">
                 <ul class="navbar-nav mr-auto">
-                    <li class="nav-item"><button  onclick="switch_view(random_view)" class="nav-link">Random Recipe</button></li>
-                    <li class="nav-item"><button onclick="switch_view(search_view)" class="nav-link">Search for a recipe</button></li>
-                    <li class="nav-item"><button onclick="switch_view(create_view)" class="nav-link">Create a Recipe</a></li>
+                    <li class="nav-item"><button onclick="switch_view(random_view)" class="nav-link">Random
+                            Recipe</button></li>
+                    <li class="nav-item"><button onclick="switch_view(search_view)" class="nav-link">Search for a
+                            recipe</button></li>
+                    <li class="nav-item"><button onclick="switch_view(create_view)" class="nav-link">Create a Recipe</a>
+                    </li>
                 </ul>
             </div>
         </nav>
         <div id="random_view">
-            <h1>Hello 1</h1>
+            <div class="px-4 pt-5 my-1 text-center border-bottom">
+                <h1 class="display-4 text-body-emphasis">Random Recipes</h1>
+                <div class="col-lg-6 mx-auto">
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mb-5 my-5">
+                        <button class="btn btn-dark btn-lg">Give me a new recipe!</button>
+                    </div>
+                </div>
+                <div class="pb-5 d-flex align-items-center justify-content-center">
+                    <div id="random_recipe_view" class="card" style="width: 20rem;">
+                        <img src="..." alt="recipe_image" class="card-img-top">
+                        <div class="card-body"></div>
+                        <h3>Recipe Title</h1>
+                        <p>Recipe Ingredients</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div id="search_view" style="display:none">
-            <h1>Hello 2</h1>
-        </div>
-        <div id="create_view" style="display:none">
-            <h1>Hello 3</h1>
-        </div>
+    </div>
+    <div id="search_view" style="display:none">
+        <h1>Hello 2</h1>
+    </div>
+    <div id="create_view" style="display:none">
+        <h1>Hello 3</h1>
+    </div>
     </div>
 
     <script src="/js/script.js"></script>
