@@ -27,5 +27,18 @@ function get_random_recipe() {
   })
 }
 
+let ingredient_count = 1
+function add_ingredient() {
+  ingredient_count += 1
+  let html_str = `<input type="text" class="form-control mt-2" id="ingredientsInput${ingredient_count}">`;
+  document.getElementById("ingredients_input_list").innerHTML += html_str;
+}
+
+let instruction_count = 1
+function add_instruction() {
+  instruction_count += 1
+  let html_str = `<input type="text" class="form-control mt-2" id=\"instructionsInput${instruction_count}\">`;
+  document.getElementById("instructions_input_list").innerHTML += html_str;
+}
 
 window.onload = get_random_recipe;
