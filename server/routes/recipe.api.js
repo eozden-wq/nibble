@@ -13,6 +13,14 @@ function json_response(code, message) {
     };
 }
 
+const yup = require('yup');
+const createRecipeSchema = yup.object().shape({
+    dish_name: yup.string().required('Dish name is required'),
+    author: yup.string().required('Author of the recipe is required'),
+    instructions: yup.array().of(yup.string().required('Instruction can\'t be empty')).required('Instructions are required'),
+    ingredients: yup.array().of(yup.string().required('Ingredients can\'t be empty')).required('Instructions are required')
+});
+
 router.use(express.json());
 
 /**
@@ -38,9 +46,17 @@ router.use(express.json());
  *                description: Name of the dish
  *                example: Sticky Toffee Pudding
  *            instructions:
- *                type: string
+ *                type: array
+ *                items:
+ *                  type: string
+ *                  example: Cook to al dente
  *                description: Instructions on how to make the dish
- *                example: 1. Make toffee 2. Make pudding 3. Make it sticky 4. ??? 5. Profit
+ *            ingredients:
+ *                type: array
+ *                items:
+ *                  type: string
+ *                  example: Toffee
+ *                description: Ingredients for the recipe
  *    Response:
  *        type: object
  *        required:
@@ -166,7 +182,7 @@ router.get('/search', (req, res) => {
     res.end();
 });
 
- 
+
 /**
  * @swagger
  * /api/recipe/create:
@@ -209,18 +225,25 @@ router.get('/search', (req, res) => {
  *                  dish_name:
  *                      type: string
  *                  instructions:
- *                      type: string
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                  ingredients:
+ *                      type: array
+ *                      items:
+ *                          type: string
  */
-router.post('/create', (req, res) => {
+router.post('/create', async (req, res) => {
     try {
-        let recipe = new Recipe(req.body);
+        const valid_body = await createRecipeSchema.validate(req.body, {abortEarly: false,});
+        let recipe = new Recipe(valid_body);
         streamer.write(recipe);
-        res.json(json_response(200, "Success"));
+        res.end();
     } catch (err) {
         res.status(400);
-        res.json(json_response(400, "Malformed request"));
+        res.json(json_response(400, "Malformed request"));        
+        res.end();
     }
-    res.end();
 });
 
 
