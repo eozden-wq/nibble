@@ -46,9 +46,17 @@ router.use(express.json());
  *                description: Name of the dish
  *                example: Sticky Toffee Pudding
  *            instructions:
- *                type: string
+ *                type: array
+ *                items:
+ *                  type: string
+ *                  example: Cook to al dente
  *                description: Instructions on how to make the dish
- *                example: 1. Make toffee 2. Make pudding 3. Make it sticky 4. ??? 5. Profit
+ *            ingredients:
+ *                type: array
+ *                items:
+ *                  type: string
+ *                  example: Toffee
+ *                description: Ingredients for the recipe
  *    Response:
  *        type: object
  *        required:
@@ -217,7 +225,13 @@ router.get('/search', (req, res) => {
  *                  dish_name:
  *                      type: string
  *                  instructions:
- *                      type: string
+ *                      type: array
+ *                      items:
+ *                          type: string
+ *                  ingredients:
+ *                      type: array
+ *                      items:
+ *                          type: string
  */
 router.post('/create', async (req, res) => {
     try {
