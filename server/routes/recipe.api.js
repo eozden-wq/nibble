@@ -13,6 +13,13 @@ function json_response(code, message) {
     };
 }
 
+const yup = require('yup');
+const createRecipeSchema = yup.object().shape({
+    dish_name: yup.string().required('Dish name is required'),
+    author: yup.string().required('Author of the recipe is required'),
+    instructions: yup.array().of(yup.string().required('Instruction can\'t be empty')).required('Instructions are required')
+});
+
 router.use(express.json());
 
 /**
@@ -166,7 +173,7 @@ router.get('/search', (req, res) => {
     res.end();
 });
 
- 
+
 /**
  * @swagger
  * /api/recipe/create:
@@ -211,16 +218,17 @@ router.get('/search', (req, res) => {
  *                  instructions:
  *                      type: string
  */
-router.post('/create', (req, res) => {
+router.post('/create', async (req, res) => {
     try {
-        let recipe = new Recipe(req.body);
+        const valid_body = await createRecipeSchema.validate(req.body, {abortEarly: false,});
+        let recipe = new Recipe(valid_body);
         streamer.write(recipe);
-        res.json(json_response(200, "Success"));
+        res.end();
     } catch (err) {
         res.status(400);
-        res.json(json_response(400, "Malformed request"));
+        res.json(json_response(400, "Malformed request"));        
+        res.end();
     }
-    res.end();
 });
 
 
