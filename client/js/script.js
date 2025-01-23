@@ -15,12 +15,12 @@ function switch_view(view) {
 }
 
 
-function load_recipe_on_page_load() {
+function get_random_recipe() {
   fetch("http://localhost:3000/api/recipe/random").then(res => res.json()).then(body => {
-    console.log(body);
     document.querySelector("#recipe_title").innerHTML = body['dish_name']
+    document.querySelector("#recipe_ingredients").innerHTML = body['instructions']
   })
 }
 
 
-window.onload = load_recipe_on_page_load;
+window.onload = get_random_recipe;
