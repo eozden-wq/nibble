@@ -17,8 +17,13 @@ function switch_view(view) {
 
 function get_random_recipe() {
   fetch("http://localhost:3000/api/recipe/random").then(res => res.json()).then(body => {
-    document.querySelector("#recipe_title").innerHTML = body['dish_name']
-    document.querySelector("#recipe_ingredients").innerHTML = body['instructions']
+    document.querySelector("#recipe_title").innerHTML = body['dish_name'];
+    let ingredients = body['ingredients'];
+    let buffer = ""
+    for (let ingredient of ingredients) {
+      buffer += `<li>${ingredient}</li>` 
+    }
+    document.querySelector("#recipe_ingredients").innerHTML = `What you'll need: <ul>${buffer}</ul>`
   })
 }
 
