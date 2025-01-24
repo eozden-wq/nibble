@@ -206,31 +206,8 @@ router.get("/search", (req, res) => {
   res.end();
 });
 
-router.get("/img/get", (req, res) => {
-  try {
-    if (typeof req.query.id === "undefined") {
-      throw TypeError;
-    }
-
-    let recipe_data = streamer.read(req.query.id);
-    if (
-      recipe_data["image_path"] === null ||
-      typeof recipe_data["image_path"] === "undefined"
-    ) {
-      res.status(404);
-      res.json(json_response(404, "This recipe does not have an image"));
-      res.end();
-    } else {
-      res.status(200);
-      res.sendFile(__dirname + "/" + recipe_data["image_path"]);
-      res.end();
-    }
-  } catch (err) {
-    console.log(err);
-    res.status(400);
-    res.json(json_response(400, "Malformed Request"));
-  }
-});
+// Route with images
+router.use("/img", express.static("server/data/recipe_imgs"));
 
 router.post("/img/add", (req, res) => {});
 
@@ -293,9 +270,7 @@ router.post("/create", upload.single("recipe_img"), async (req, res) => {
     if (req.file === undefined) {
       valid_body["image_path"] = null;
     } else {
-      valid_body[
-        "image_path"
-      ] = `server/data/recipe_imgs/recipe-${streamer.get_size()}${path.extname(
+      valid_body["image_path"] = `recipe-${streamer.get_size()}${path.extname(
         req.file.originalname
       )}`;
     }

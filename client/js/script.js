@@ -27,6 +27,13 @@ function get_random_recipe() {
       document.querySelector(
         "#recipe_ingredients"
       ).innerHTML = `What you'll need: <ul>${buffer}</ul>`;
+
+      let recipe_img_link = document.querySelector("#recipe_img_elem");
+      if (body["image_path"] === null) {
+        recipe_img_link.src = `/imgs/404.webp`;
+      } else {
+        recipe_img_link.src = `/api/recipe/img/${body["image_path"]}`;
+      }
     });
 }
 
