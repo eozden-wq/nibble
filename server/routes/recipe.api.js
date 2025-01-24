@@ -1,27 +1,45 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
 
-const RecipeSerializer = require('../core/RecipeStreamer');
-const Recipe = require('../core/Recipe');
+const RecipeSerializer = require("../core/RecipeStreamer");
+const Recipe = require("../core/Recipe");
 
 let streamer = new RecipeSerializer("./server/data/recipes.json");
 
-const multer = require('multer');
-const upload = multer({dest: 'data/recipe_imgs'})
+const multer = require("multer");
+const path = require("path");
+
+const storage = multer.diskStorage({
+  destination: (req, res, cb) => {
+    cb(null, "server/data/recipe_imgs");
+  },
+  filename: (req, file, cb) => {
+    const unique_suffix = streamer.get_size();
+    cb(null, `recipe-${unique_suffix}${path.extname(file.originalname)}`);
+  },
+});
+
+const upload = multer({ storage: storage });
 
 function json_response(code, message) {
-    return {
-        "code": code,
-        "message": message
-    };
+  return {
+    code: code,
+    message: message,
+  };
 }
 
-const yup = require('yup');
+const yup = require("yup");
 const createRecipeSchema = yup.object().shape({
-    dish_name: yup.string().required('Dish name is required'),
-    author: yup.string().required('Author of the recipe is required'),
-    instructions: yup.array().of(yup.string().required('Instruction can\'t be empty')).required('Instructions are required'),
-    ingredients: yup.array().of(yup.string().required('Ingredients can\'t be empty')).required('Instructions are required')
+  dish_name: yup.string().required("Dish name is required"),
+  author: yup.string().required("Author of the recipe is required"),
+  instructions: yup
+    .array()
+    .of(yup.string().required("Instruction can't be empty"))
+    .required("Instructions are required"),
+  ingredients: yup
+    .array()
+    .of(yup.string().required("Ingredients can't be empty"))
+    .required("Instructions are required"),
 });
 
 router.use(express.json());
@@ -79,7 +97,7 @@ router.use(express.json());
  *  get:
  *      parameters:
  *        - in: query
- *          name: recipe_id                   
+ *          name: recipe_id
  *          schema:
  *              type: integer
  *          required: true
@@ -94,18 +112,18 @@ router.use(express.json());
  *              description: An invalid ID has been passed as a query parameter
  *              schema:
  *                  $ref: "#/definitions/Response"
- *                          
+ *
  */
-router.get('/get', (req, res) => {
-    try {
-        let data = streamer.read(req.query.recipe_id);
-        res.status(200);
-        res.json(data);
-    } catch (err) {
-        res.status(400);
-        res.json(json_response(400, "Malformed request"));
-    }
-    res.end();
+router.get("/get", (req, res) => {
+  try {
+    let data = streamer.read(req.query.recipe_id);
+    res.status(200);
+    res.json(data);
+  } catch (err) {
+    res.status(400);
+    res.json(json_response(400, "Malformed request"));
+  }
+  res.end();
 });
 
 /**
@@ -115,7 +133,7 @@ router.get('/get', (req, res) => {
  *          summary: Get a random recipe from the recipes
  *          responses:
  *              "200":
- *                  description: A random stored recipe 
+ *                  description: A random stored recipe
  *                  schema:
  *                      $ref: '#/definitions/Recipe'
  *              "500":
@@ -123,16 +141,16 @@ router.get('/get', (req, res) => {
  *                  schema:
  *                      $ref: '#/definitions/Response'
  */
-router.get('/random', (req, res) => {
-    try {
-        let data = streamer.read(Math.floor(Math.random() * streamer.get_size()));
-        res.status(200);
-        res.json(data);
-    } catch (err) {
-        res.status(500);
-        res.json(json_response(500, "Internal Server Error"));
-    }
-    res.end();
+router.get("/random", (req, res) => {
+  try {
+    let data = streamer.read(Math.floor(Math.random() * streamer.get_size()));
+    res.status(200);
+    res.json(data);
+  } catch (err) {
+    res.status(500);
+    res.json(json_response(500, "Internal Server Error"));
+  }
+  res.end();
 });
 
 /**
@@ -169,22 +187,24 @@ router.get('/random', (req, res) => {
  *                              example: 400
  *                          message:
  *                              type: string
- *                              example: "Malformed request" 
+ *                              example: "Malformed request"
  */
-router.get('/search', (req, res) => {
-    try {
-        if (typeof req.query.key === 'undefined' || typeof req.query.field === 'undefined') {
-            throw TypeError;
-        }
-        res.status(200);
-        res.json(streamer.search(req.query.field, req.query.key));
-    } catch (err) {
-        res.status(400);
-        res.json(json_response(400, "Malformed request"));
+router.get("/search", (req, res) => {
+  try {
+    if (
+      typeof req.query.key === "undefined" ||
+      typeof req.query.field === "undefined"
+    ) {
+      throw TypeError;
     }
-    res.end();
+    res.status(200);
+    res.json(streamer.search(req.query.field, req.query.key));
+  } catch (err) {
+    res.status(400);
+    res.json(json_response(400, "Malformed request"));
+  }
+  res.end();
 });
-
 
 /**
  * @swagger
@@ -211,7 +231,7 @@ router.get('/search', (req, res) => {
  *                          example: 400
  *                      message:
  *                          type: string
- *                          example: "Malformed request" 
+ *                          example: "Malformed request"
  *      parameters:
  *        - in: body
  *          name: recipe
@@ -236,18 +256,20 @@ router.get('/search', (req, res) => {
  *                      items:
  *                          type: string
  */
-router.post('/create', async (req, res) => {
-    try {
-        const valid_body = await createRecipeSchema.validate(req.body, {abortEarly: false,});
-        let recipe = new Recipe(valid_body);
-        streamer.write(recipe);
-        res.end();
-    } catch (err) {
-        res.status(400);
-        res.json(json_response(400, "Malformed request"));        
-        res.end();
-    }
+router.post("/create", upload.single("recipe_img"), async (req, res) => {
+  let recipe_data = JSON.parse(req.body["json"]);
+  try {
+    const valid_body = await createRecipeSchema.validate(recipe_data, {
+      abortEarly: false,
+    });
+    let recipe = new Recipe(valid_body);
+    streamer.write(recipe);
+    res.end();
+  } catch (err) {
+    res.status(400);
+    res.json(json_response(400, "Malformed request"));
+    res.end();
+  }
 });
-
 
 module.exports = router;
