@@ -7,6 +7,7 @@ const Recipe = require('../core/Recipe');
 let streamer = new RecipeSerializer("./server/data/recipes.json");
 
 const multer = require('multer');
+const upload = multer({dest: 'data/recipe_imgs'})
 
 function json_response(code, message) {
     return {
