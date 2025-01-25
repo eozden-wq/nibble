@@ -146,7 +146,7 @@ form.addEventListener("submit", async (event) => {
     method: "POST",
     body: data,
   })
-    .then((res) => res.json())
+    .then((res) => console.log(res))
     .then((body) => {
       console.log(body);
     });
@@ -160,3 +160,71 @@ window.addEventListener("offline", (e) => {
 window.addEventListener("online", (e) => {
   document.body.innerHTML += error_messages[1];
 });
+
+function construct_search_cards(results_arr) {
+  let search_results_div = document.getElementById("search-results");
+  search_results_div.innerHTML = "";
+  for (const result of results_arr) {
+    console.log(result);
+    // Get the image path for the result
+
+    let image_path = "";
+    if (result["image_path"] === null) {
+      image_path = "/imgs/404.webp";
+    } else {
+      image_path = `/api/recipe/img/${result["image_path"]}`;
+    }
+
+    let card_template = `      
+  <div class="container mt-5">
+        <div class="card">
+          <div class="row g-0 align-items-center">
+            <!-- Image Section -->
+            <div class="col-md-4">
+              <img
+                src="${image_path}"
+                class="img-fluid rounded-start"
+                alt="Card Image"
+              />
+            </div>
+            <!-- Information Section -->
+            <div class="col-md-8">
+              <div class="card-body">
+                <h5 class="card-title">${result["dish_name"]}</h5>
+                <p class="card-text">
+                  This is a short description about the content of the card. It
+                  gives a brief overview of the information on the card.
+                </p>
+                <p class="card-text">
+                  <small class="text-muted">~ ${result["author"]}</small>
+                </p>
+                <a href="#" class="btn btn-primary">Learn More</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      `;
+
+    search_results_div.innerHTML += card_template;
+  }
+}
+
+document
+  .getElementById("search-value")
+  .addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    let input_value = document.getElementById("search-bar").value;
+    console.log(input_value);
+
+    fetch(
+      `http://localhost:3000/api/recipe/search?key=${input_value}&field=dish_name`,
+      {
+        method: "GET",
+        headers: { Accept: "application/json" },
+      }
+    )
+      .then((res) => res.json())
+      .then((response) => construct_search_cards(response));
+  });

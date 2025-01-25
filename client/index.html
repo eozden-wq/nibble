@@ -124,7 +124,29 @@
     </div>
 
     <div id="search_view" style="display: none">
-      <h1>Hello 2</h1>
+      <div class="px-4 pt-5 my-1 text-center">
+        <h1 class="display-4 text-body-emphasis">Find a New Recipe</h1>
+        <div class="container-fluid pb-3">
+          <form id="search-value" class="d-flex">
+            <input
+              class="form-control me-2"
+              type="search"
+              id="search-bar"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button
+              id="search-button"
+              class="btn btn-outline-success"
+              type="submit"
+            >
+              Search
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div id="search-results" class="pb-5"></div>
     </div>
 
     <div id="create_view" style="display: none">
