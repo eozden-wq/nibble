@@ -3,6 +3,7 @@
 const express = require("express");
 const app = express();
 const recipe_api = require("./routes/recipe.api");
+const comment_api = require("./routes/comment.api");
 
 /**
  * Automatic documentation setup
@@ -39,5 +40,6 @@ app.get("/", (req, res) => {
 
 // Recipe-related API-endpoints
 app.use("/api/recipe", recipe_api);
+app.use("/api/comment", comment_api);
 
 module.exports = app;
