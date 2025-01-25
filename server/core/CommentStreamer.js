@@ -1,4 +1,5 @@
 const fs = require("fs");
+const Comment = require("./Comment");
 
 class CommentStreamer {
   constructor(comment_file) {
@@ -10,7 +11,7 @@ class CommentStreamer {
     });
   }
 
-  GetAllComments(recipe_id) {
+  getAllComments(recipe_id) {
     try {
       let res = [];
 
@@ -21,6 +22,19 @@ class CommentStreamer {
       }
 
       return res;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  write(comment) {
+    try {
+      if (!(comment instanceof Comment)) {
+        throw TypeError;
+      }
+
+      this.comments.push(comment);
+      fs.writeFileSync(this.comment_file, JSON.stringify(this.comments));
     } catch (err) {
       throw err;
     }
