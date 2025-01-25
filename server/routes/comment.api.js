@@ -41,7 +41,7 @@ let streamer = new CommentSerializer("./server/data/comments.json");
  *        - in: query
  *          description: ID that the comment corresponds to
  *          name: id
- *          type: string
+ *          type: integer
  *          required: true
  */
 router.get("/get", (req, res) => {
@@ -56,6 +56,37 @@ router.get("/get", (req, res) => {
 });
 
 /**
+ * @swagger
+ *  /api/comment/create:
+ *    post:
+ *      summary: Post a comment under a recipe
+ *      responses:
+ *        "200":
+ *          description: Successfully added new recipe
+ *          schema:
+ *            type: object
+ *            properties:
+ *              code:
+ *                type: integer
+ *                example: 200
+ *              message:
+ *                type: string
+ *                example: "Success"
+ *        "400":
+ *          description: The request format isn't correct
+ *          schema:
+ *            type: object
+ *            properties:
+ *              code:
+ *                type: integer
+ *                example: 400
+ *              message:
+ *                type: string
+ *                example: "Malformed request"
+ *      parameters:
+ *        - in: body
+ *          schema:
+ *            $ref: '#/definitions/Comment'
  */
 router.post("/create", (req, res) => {
   try {
