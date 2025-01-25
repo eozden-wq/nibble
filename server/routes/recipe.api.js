@@ -19,7 +19,18 @@ const storage = multer.diskStorage({
   },
 });
 
+const storage_edit = multer.diskStorage({
+  destination: (req, res, cb) => {
+    cb(null, "server/data/recipe_imgs");
+  },
+  filename: (req, file, cb) => {
+    const unique_suffix = req.query.id;
+    cb(null, `recipe-${unique_suffix}${path.extname(file.originalname)}`);
+  },
+});
+
 const upload = multer({ storage: storage });
+const upload_edit = multer({ storage: storage_edit });
 
 function json_response(code, message) {
   return {
@@ -209,7 +220,20 @@ router.get("/search", (req, res) => {
 // Route with images
 router.use("/img", express.static("server/data/recipe_imgs"));
 
-router.post("/img/add", (req, res) => {});
+router.post("/img/add", upload_edit.single("recipe_img"), (req, res) => {
+  try {
+    streamer.edit(
+      req.query.id,
+      "image_path",
+      `recipe-${req.query.id}${path.extname(req.file.originalname)}`
+    );
+    res.status(200);
+    res.json(json_response(200, "Success"));
+  } catch (err) {
+    res.status(400);
+    res.json(json_response(400, "Malformed request"));
+  }
+});
 
 /**
  * @swagger
