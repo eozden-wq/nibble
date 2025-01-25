@@ -180,7 +180,7 @@ function construct_search_cards(results_arr) {
         <div class="card">
           <div class="row g-0 align-items-center">
             <!-- Image Section -->
-            <div class="col-md-4">
+            <div class="col-auto">
               <img
                 src="${image_path}"
                 class="img-fluid rounded-start card-img-left"
