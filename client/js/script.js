@@ -8,6 +8,40 @@ let CURRENT_VIEW = random_view;
 
 const API_URL = "http://localhost:3000";
 
+const error_messages = {
+  SERVER_ERROR: `<div class="message">
+      <div
+        class="inner-message alert alert-danger alert-dismissible fade show"
+        role="alert"
+      >
+        <strong>Server Connection Error:</strong> Hey, sorry about that, there
+        seems to be a problem with our servers :)
+        <button
+          type="button"
+          class="btn-close"
+          data-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>`,
+  BACK_ONLINE: `<div class="message">
+      <div
+        class="inner-message alert alert-warning alert-dismissible fade show"
+        role="alert"
+      >
+        <strong>Network Error:</strong> There seems to be a problem with your
+        network. Please check your connection :)
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>`,
+  OFFLINE: ``,
+};
+
 function switch_view(view) {
   CURRENT_VIEW.style = "display: none";
   CURRENT_VIEW = view;
@@ -34,6 +68,10 @@ function get_random_recipe() {
       } else {
         recipe_img_link.src = `/api/recipe/img/${body["image_path"]}`;
       }
+    })
+    .catch((error) => {
+      console.log(error);
+      document.body.innerHTML += error_messages["SERVER_ERROR"];
     });
 }
 
@@ -115,3 +153,10 @@ form.addEventListener("submit", async (event) => {
 });
 
 window.onload = get_random_recipe;
+window.addEventListener("offline", (e) => {
+  document.body.innerHTML += error_messages[0];
+});
+
+window.addEventListener("online", (e) => {
+  document.body.innerHTML += error_messages[1];
+});
