@@ -9,7 +9,40 @@ const Comment = require("../core/Comment");
 let streamer = new CommentSerializer("./server/data/comments.json");
 
 /**
- * Gets all comments relating to a recipe
+ * @swagger
+ *  definitions:
+ *    Comment:
+ *      type: object
+ *      properties:
+ *        recipe_id:
+ *          type: integer
+ *          description: ID of the recipe pertaining to the comment
+ *          example: 2
+ *        message:
+ *          type: string
+ *          description: Message of the comment
+ *          example: "Wow, this tasted amazing!"
+ */
+
+/**
+ * @swagger
+ *  /api/comment/get:
+ *    get:
+ *      summary: Get all the comments that have been added under a recipe
+ *      responses:
+ *        "200":
+ *          description: All the comments under the given recipe has been fetched
+ *          schema:
+ *            type: array
+ *            items:
+ *              $ref: '#/definitions/Comment'
+ *
+ *      parameters:
+ *        - in: query
+ *          description: ID that the comment corresponds to
+ *          name: id
+ *          type: string
+ *          required: true
  */
 router.get("/get", (req, res) => {
   try {
@@ -23,7 +56,6 @@ router.get("/get", (req, res) => {
 });
 
 /**
- * Creates comment under a recipe
  */
 router.post("/create", (req, res) => {
   try {
