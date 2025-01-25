@@ -24,3 +24,9 @@ body {
 .inner-message {
   margin: 0 auto;
 }
+
+.card-img-left {
+  width: 250px;
+  height: auto;
+  object-fit: cover;
+}

@@ -183,7 +183,7 @@ function construct_search_cards(results_arr) {
             <div class="col-md-4">
               <img
                 src="${image_path}"
-                class="img-fluid rounded-start"
+                class="img-fluid rounded-start card-img-left"
                 alt="Card Image"
               />
             </div>
