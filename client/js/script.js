@@ -97,6 +97,7 @@ form.addEventListener("submit", async (event) => {
   const singredients = [];
   let sauthor = "";
   let dishName = "";
+  let sdescription = "";
 
   const formData = new FormData(form);
 
@@ -120,6 +121,8 @@ form.addEventListener("submit", async (event) => {
     } else if (lowerKey === "dish_name") {
       // Dish name field
       dishName = value;
+    } else if (lowerKey === "description") {
+      description = value;
     }
   }
 
@@ -128,6 +131,7 @@ form.addEventListener("submit", async (event) => {
     dish_name: dishName,
     ingredients: singredients,
     instructions: sinstructions,
+    description: sdescription,
   };
 
   const blob = JSON.stringify(final_obj, { type: "application/json" });
