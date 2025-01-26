@@ -54,13 +54,9 @@ function get_random_recipe() {
     .then((body) => {
       document.querySelector("#recipe_title").innerHTML = body["dish_name"];
       let ingredients = body["ingredients"];
-      let buffer = "";
-      for (let ingredient of ingredients) {
-        buffer += `<li>${ingredient}</li>`;
-      }
       document.querySelector(
-        "#recipe_ingredients"
-      ).innerHTML = `What you'll need: <ul>${buffer}</ul>`;
+        "#recipe_description"
+      ).innerHTML = `${body["description"]}`;
 
       let recipe_img_link = document.querySelector("#recipe_img_elem");
       if (body["image_path"] === null) {
@@ -191,10 +187,7 @@ function construct_search_cards(results_arr) {
             <div class="col-md-8">
               <div class="card-body">
                 <h5 class="card-title">${result["dish_name"]}</h5>
-                <p class="card-text">
-                  This is a short description about the content of the card. It
-                  gives a brief overview of the information on the card.
-                </p>
+                <p class="card-text">${result["description"]}</p>
                 <p class="card-text">
                   <small class="text-muted">~ ${result["author"]}</small>
                 </p>
