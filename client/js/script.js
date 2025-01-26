@@ -48,6 +48,8 @@ function switch_view(view) {
   view.style.display = "";
 }
 
+let CURRENT_RANDOM_RECIPE_ID = null;
+
 function get_random_recipe() {
   fetch("http://localhost:3000/api/recipe/random")
     .then((res) => res.json())
@@ -64,6 +66,8 @@ function get_random_recipe() {
       } else {
         recipe_img_link.src = `/api/recipe/img/${body["image_path"]}`;
       }
+
+      CURRENT_RANDOM_RECIPE_ID = body["id"];
     })
     .catch((error) => {
       console.log(error);
@@ -225,3 +229,18 @@ document
       .then((res) => res.json())
       .then((response) => construct_search_cards(response));
   });
+
+function showRecipeView(recipe_id) {
+  fetch(`/api/recipe/get?recipe_id=${recipe_id}`, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      document.getElementById("cardModalTitle").textContent = res["dish_name"];
+      document.getElementById("cardModalContent").textContent =
+        res["description"];
+      const modal = new bootstrap.Modal(document.getElementById("cardModal"));
+      modal.show();
+    });
+}
