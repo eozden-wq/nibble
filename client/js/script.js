@@ -122,7 +122,7 @@ form.addEventListener("submit", async (event) => {
       // Dish name field
       dishName = value;
     } else if (lowerKey === "description") {
-      description = value;
+      sdescription = value;
     }
   }
 
