@@ -181,7 +181,7 @@ function construct_search_cards(results_arr) {
 
     let card_template = `      
   <div class="container mt-5">
-        <div class="card">
+        <div class="card" onclick=showRecipeView(${result["id"]})>
           <div class="row g-0 align-items-center">
             <!-- Image Section -->
             <div class="col-auto">
@@ -262,6 +262,12 @@ function showRecipeView(recipe_id) {
                 <div class="comment align-middle">${message["message"]}</div>
               </div>`;
       }
+    });
+
+  document
+    .getElementById("modalRecipeCommentBtn")
+    .addEventListener("click", (event) => {
+      submitComment(recipe_id);
     });
 
   fetch(`/api/recipe/get?recipe_id=${recipe_id}`, {
