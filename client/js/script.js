@@ -24,7 +24,7 @@ const error_messages = {
         ></button>
       </div>
     </div>`,
-  BACK_ONLINE: `<div class="message">
+  OFFLINE: `<div class="message">
       <div
         class="inner-message alert alert-warning alert-dismissible fade show"
         role="alert"
@@ -39,7 +39,18 @@ const error_messages = {
         ></button>
       </div>
     </div>`,
-  OFFLINE: ``,
+  BACK_ONLINE: `    <div class="message">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Welcome back!</strong> You're back online! You may continue
+        usign Nibble
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>`,
 };
 
 function switch_view(view) {
@@ -146,23 +157,29 @@ form.addEventListener("submit", async (event) => {
 
   console.log(data);
 
-  fetch("http://localhost:3000/api/recipe/create", {
+  fetch("/api/recipe/create", {
     method: "POST",
     body: data,
   })
-    .then((res) => console.log(res))
+    .then((res) => res.json())
     .then((body) => {
-      console.log(body);
+      if (body["code"] === 400) {
+        // do some stuff to let the user know that the input isn't right
+      }
+    })
+    .catch((err) => {
+      console.log("hit");
+      document.body.innerHTML += error_messages["SERVER_ERROR"];
     });
 });
 
 window.onload = get_random_recipe;
 window.addEventListener("offline", (e) => {
-  document.body.innerHTML += error_messages[0];
+  document.body.innerHTML += error_messages["OFFLINE"];
 });
 
 window.addEventListener("online", (e) => {
-  document.body.innerHTML += error_messages[1];
+  document.body.innerHTML += error_messages["BACK_ONLINE"];
 });
 
 function construct_search_cards(results_arr) {
