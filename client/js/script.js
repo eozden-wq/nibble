@@ -61,6 +61,19 @@ const error_messages = {
       </div>
     </div>
   `,
+  COMMENT_CREATE_SUCCESS: `
+    <div class="message">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Thank you!</strong> Your comment has been added to this recipe!
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
+  `,
 };
 
 function switch_view(view) {
@@ -263,7 +276,6 @@ document
   });
 
 function submitComment(in_id) {
-  console.log(in_id);
   console.log(document.getElementById("modalCommentTxt").value);
   fetch("/api/comment/create", {
     method: "POST",
@@ -275,7 +287,13 @@ function submitComment(in_id) {
       message: document.getElementById("modalCommentTxt").value,
     }),
   })
-    .then((res) => console.log(res.json()))
+    .then((res) => res.json())
+    .then((body) => {
+      if (body["code"] === 200) {
+        document.body.innerHTML += error_messages["COMMENT_CREATE_SUCCESS"];
+        document.getElementById("modalCommentForm").reset();
+      }
+    })
     .catch((err) => {
       document.body.innerHTML += error_messages["SERVER_ERROR"];
     });
@@ -307,6 +325,8 @@ function showRecipeView(recipe_id) {
   document
     .getElementById("modalRecipeCommentBtn")
     .addEventListener("click", (event) => {
+      console.log("HIt");
+      event.preventDefault();
       submitComment(recipe_id);
     });
 
