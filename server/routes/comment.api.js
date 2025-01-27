@@ -8,6 +8,12 @@ const Comment = require("../core/Comment");
 
 let streamer = new CommentSerializer("./server/data/comments.json");
 
+const yup = require("yup");
+const createCommentSchema = yup.object().shape({
+  recipe_id: yup.number().required("The comment must correspond to a Recipe"),
+  message: yup.string().trim().nonNullable().required(),
+});
+
 /**
  * @swagger
  *  definitions:
@@ -88,9 +94,12 @@ router.get("/get", (req, res) => {
  *          schema:
  *            $ref: '#/definitions/Comment'
  */
-router.post("/create", (req, res) => {
+router.post("/create", async (req, res) => {
   try {
-    let comment = new Comment(req.body);
+    let valid_body = await createCommentSchema.validate(req.body, {
+      abortEarly: false,
+    });
+    let comment = new Comment(valid_body);
     streamer.write(comment);
     res.json({ code: 200, message: "Success" });
     res.end();

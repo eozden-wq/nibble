@@ -1,5 +1,5 @@
 class Comment {
-  constrcutor(obj) {
+  constructor(obj) {
     obj && Object.assign(this, obj);
   }
 }
