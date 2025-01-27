@@ -323,9 +323,8 @@ function showRecipeView(recipe_id) {
     });
 
   document
-    .getElementById("modalRecipeCommentBtn")
-    .addEventListener("click", (event) => {
-      console.log("HIt");
+    .getElementById("modalCommentForm")
+    .addEventListener("submit", (event) => {
       event.preventDefault();
       submitComment(recipe_id);
     });

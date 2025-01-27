@@ -301,7 +301,11 @@
               <form id="modalCommentForm">
                 <div class="row g-2 align-items-center">
                   <div class="col-auto">
-                    <button id="modalRecipeCommentBtn" class="btn btn-primary">
+                    <button
+                      id="modalRecipeCommentBtn"
+                      action="submit"
+                      class="btn btn-primary"
+                    >
                       Comment
                     </button>
                   </div>
@@ -312,6 +316,7 @@
                       id="modalCommentTxt"
                       placeholder="Write a comment..."
                       aria-label="Comment"
+                      required
                     />
                   </div>
                 </div>
