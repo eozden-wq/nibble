@@ -1,1 +1,79 @@
-[{"recipe_id":1,"message":"Wow, this tasted great! Can you substitute olive oil for butter?"},{}]
+[
+  {
+    "recipe_id": 3,
+    "message": "The flavors were fantastic, but it needed more salt."
+  },
+  {
+    "recipe_id": 7,
+    "message": "I can’t believe how easy this was to make! It’s a new favorite."
+  },
+  {
+    "recipe_id": 2,
+    "message": "The texture was perfect. I’ll definitely be sharing this recipe!"
+  },
+  {
+    "recipe_id": 5,
+    "message": "A little bland for my taste, but nothing some hot sauce couldn’t fix."
+  },
+  {
+    "recipe_id": 10,
+    "message": "Absolutely incredible! Everyone at dinner asked for the recipe."
+  },
+  {
+    "recipe_id": 1,
+    "message": "Took a bit longer than expected to cook, but it was worth it!"
+  },
+  {
+    "recipe_id": 6,
+    "message": "This was a hit at my potluck. I’ll make it again for sure."
+  },
+  {
+    "recipe_id": 9,
+    "message": "So simple yet so flavorful. My kids loved it too!"
+  },
+  {
+    "recipe_id": 0,
+    "message": "It wasn’t bad, but I feel like something was missing."
+  },
+  {
+    "recipe_id": 4,
+    "message": "I added some extra garlic, and it turned out amazing!"
+  },
+  {
+    "recipe_id": 8,
+    "message": "This recipe saved me so much time and tasted great."
+  },
+  {
+    "recipe_id": 3,
+    "message": "I paired it with a side salad, and it was the perfect meal."
+  },
+  {
+    "recipe_id": 10,
+    "message": "This is going into my weekly rotation. So good!"
+  },
+  {
+    "recipe_id": 2,
+    "message": "Next time, I’ll use less sugar, but it was still delicious."
+  },
+  {
+    "recipe_id": 7,
+    "message": "I’m so glad I found this recipe. It’s perfect for busy nights."
+  },
+  {
+    "recipe_id": 1,
+    "message": "The instructions were easy to follow, and the result was amazing."
+  },
+  { "recipe_id": 6, "message": "Not my favorite, but my roommate loved it." },
+  {
+    "recipe_id": 5,
+    "message": "I substituted the cream for coconut milk, and it was even better!"
+  },
+  {
+    "recipe_id": 8,
+    "message": "Such a crowd-pleaser! Everyone asked for seconds."
+  },
+  {
+    "recipe_id": 9,
+    "message": "I made this for a dinner party, and it was the star of the show."
+  }
+]

@@ -14,6 +14,8 @@ const createCommentSchema = yup.object().shape({
   message: yup.string().trim().nonNullable().required(),
 });
 
+router.use(express.json());
+
 /**
  * @swagger
  *  definitions:

@@ -48,6 +48,8 @@ function switch_view(view) {
   view.style.display = "";
 }
 
+let CURRENT_RANDOM_RECIPE_ID = null;
+
 function get_random_recipe() {
   fetch("http://localhost:3000/api/recipe/random")
     .then((res) => res.json())
@@ -64,6 +66,8 @@ function get_random_recipe() {
       } else {
         recipe_img_link.src = `/api/recipe/img/${body["image_path"]}`;
       }
+
+      CURRENT_RANDOM_RECIPE_ID = body["id"];
     })
     .catch((error) => {
       console.log(error);
@@ -122,7 +126,7 @@ form.addEventListener("submit", async (event) => {
       // Dish name field
       dishName = value;
     } else if (lowerKey === "description") {
-      description = value;
+      sdescription = value;
     }
   }
 
@@ -177,7 +181,7 @@ function construct_search_cards(results_arr) {
 
     let card_template = `      
   <div class="container mt-5">
-        <div class="card">
+        <div class="card" onclick=showRecipeView(${result["id"]})>
           <div class="row g-0 align-items-center">
             <!-- Image Section -->
             <div class="col-auto">
@@ -225,3 +229,82 @@ document
       .then((res) => res.json())
       .then((response) => construct_search_cards(response));
   });
+
+function submitComment(in_id) {
+  console.log(in_id);
+  console.log(document.getElementById("modalCommentTxt").value);
+  fetch("/api/comment/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      recipe_id: in_id,
+      message: document.getElementById("modalCommentTxt").value,
+    }),
+  }).then((res) => console.log(res.json()));
+}
+
+function showRecipeView(recipe_id) {
+  let comments = fetch(`/api/comment/get?id=${recipe_id}`, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      document.getElementById("modalCommentsResult").innerHTML = "";
+
+      console.log(res);
+      for (const message of res) {
+        document.getElementById(
+          "modalCommentsResult"
+        ).innerHTML += `<div class="row mx-2 my-2 py-3 border align-middle">
+                <div class="comment align-middle">${message["message"]}</div>
+              </div>`;
+      }
+    });
+
+  document
+    .getElementById("modalRecipeCommentBtn")
+    .addEventListener("click", (event) => {
+      submitComment(recipe_id);
+    });
+
+  fetch(`/api/recipe/get?recipe_id=${recipe_id}`, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      document.getElementById("cardModalTitle").textContent = res["dish_name"];
+      document.getElementById("recipeModalDesc").textContent =
+        res["description"];
+
+      let img_path = "/imgs/404.webp";
+      if (res["image_path"] !== null) {
+        img_path = `/api/recipe/img/${res["image_path"]}`;
+      }
+      document.getElementById("recipeModalImg").src = img_path;
+      document.getElementById(
+        "recipeModalAuthor"
+      ).textContent = `~ ${res["author"]}`;
+
+      document.getElementById("modalIngredientsList").innerHTML = "";
+      document.getElementById("modalInstructionsList").innerHTML = "";
+
+      for (const ingredient of res["ingredients"]) {
+        document.getElementById(
+          "modalIngredientsList"
+        ).innerHTML += `<li>${ingredient}</li>`;
+      }
+
+      for (const instruction of res["instructions"]) {
+        document.getElementById(
+          "modalInstructionsList"
+        ).innerHTML += `<li>${instruction}</li>`;
+      }
+
+      const modal = new bootstrap.Modal(document.getElementById("cardModal"));
+      modal.show();
+    });
+}
