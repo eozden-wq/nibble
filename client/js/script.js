@@ -39,7 +39,7 @@ const error_messages = {
   BACK_ONLINE: `    <div class="message">
       <div class="alert alert-success alert-dismissible fade show" role="alert">
         <strong>Welcome back!</strong> You're back online! You may continue
-        usign Nibble
+        using Nibble
         <button
           type="button"
           class="btn-close"
@@ -48,6 +48,19 @@ const error_messages = {
         ></button>
       </div>
     </div>`,
+  RECIPE_CREATE_SUCCESS: `
+  <div class="message">
+      <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Thank you!</strong> Your recipe has been created!
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
+  `,
 };
 
 function switch_view(view) {
@@ -160,8 +173,9 @@ form.addEventListener("submit", async (event) => {
   })
     .then((res) => res.json())
     .then((body) => {
-      if (body["code"] === 400) {
-        // do some stuff to let the user know that the input isn't right
+      if (body["code"] === 200) {
+        form.reset();
+        document.body.innerHTML += error_messages["RECIPE_CREATE_SUCCESS"];
       }
     })
     .catch((err) => {
