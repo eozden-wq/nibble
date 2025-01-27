@@ -253,7 +253,7 @@
       aria-labelledby="cardModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog">
+      <div class="modal-dialog modal-xl">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="cardModalTitle">Modal Title</h5>
@@ -265,7 +265,64 @@
             ></button>
           </div>
           <div class="modal-body" id="cardModalContent">
-            Modal content goes here.
+            <div class="container text-center">
+              <div class="row">
+                <div class="col">
+                  <img
+                    src=""
+                    id="recipeModalImg"
+                    class="modal-img"
+                    alt="recipe_img"
+                    srcset=""
+                  />
+                </div>
+                <div class="col">
+                  <p id="recipeModalDesc"></p>
+                  <p id="recipeModalAuthor"></p>
+                  <div class="row">
+                    <div class="col">
+                      <h3>Ingredients</h3>
+                      <ul id="modalIngredientsList"></ul>
+                    </div>
+                    <div class="col">
+                      <h3>Instructions</h3>
+                      <ol id="modalInstructionsList"></ol>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4">
+              <form>
+                <div class="row g-2 align-items-center">
+                  <div class="col-auto">
+                    <button
+                      onclick="submitComment(CURRENT_RANDOM_RECIPE_ID)"
+                      id="modalRecipeCommentBtn"
+                      class="btn btn-primary"
+                    >
+                      Comment
+                    </button>
+                  </div>
+                  <div class="col flex-grow-1">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="modalCommentTxt"
+                      placeholder="Write a comment..."
+                      aria-label="Comment"
+                    />
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            <div class="comments pt-3">
+              <div class="row mb-2 mx-2 py-3 border align-middle">
+                <!-- Comment prototype -->
+                <div class="comment align-middle">Comment1</div>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
             <button

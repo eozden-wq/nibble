@@ -39,3 +39,9 @@ body {
 .card:hover {
   transform: scale(1.02);
 }
+
+.modal-img {
+  width: 500px;
+  height: auto;
+  object-fit: cover;
+}

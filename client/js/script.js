@@ -230,7 +230,31 @@ document
       .then((response) => construct_search_cards(response));
   });
 
+function submitComment(in_id) {
+  console.log(in_id);
+  console.log(document.getElementById("modalCommentTxt").value);
+  fetch("/api/comment/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      recipe_id: in_id,
+      message: document.getElementById("modalCommentTxt").value,
+    }),
+  }).then((res) => console.log(res.json()));
+}
+
 function showRecipeView(recipe_id) {
+  let comments = fetch(`/api/comment/get?id=${recipe_id}`, {
+    method: "GET",
+    headers: { Accept: "application/json" },
+  })
+    .then((res) => res.json())
+    .then((res) => {
+      return res;
+    });
+
   fetch(`/api/recipe/get?recipe_id=${recipe_id}`, {
     method: "GET",
     headers: { Accept: "application/json" },
@@ -238,8 +262,33 @@ function showRecipeView(recipe_id) {
     .then((res) => res.json())
     .then((res) => {
       document.getElementById("cardModalTitle").textContent = res["dish_name"];
-      document.getElementById("cardModalContent").textContent =
+      document.getElementById("recipeModalDesc").textContent =
         res["description"];
+
+      let img_path = "/imgs/404.webp";
+      if (res["image_path"] !== null) {
+        img_path = `/api/recipe/img/${res["image_path"]}`;
+      }
+      document.getElementById("recipeModalImg").src = img_path;
+      document.getElementById(
+        "recipeModalAuthor"
+      ).textContent = `~ ${res["author"]}`;
+
+      document.getElementById("modalIngredientsList").innerHTML = "";
+      document.getElementById("modalInstructionsList").innerHTML = "";
+
+      for (const ingredient of res["ingredients"]) {
+        document.getElementById(
+          "modalIngredientsList"
+        ).innerHTML += `<li>${ingredient}</li>`;
+      }
+
+      for (const instruction of res["instructions"]) {
+        document.getElementById(
+          "modalInstructionsList"
+        ).innerHTML += `<li>${instruction}</li>`;
+      }
+
       const modal = new bootstrap.Modal(document.getElementById("cardModal"));
       modal.show();
     });
