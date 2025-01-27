@@ -8,6 +8,8 @@ const Comment = require("../core/Comment");
 
 let streamer = new CommentSerializer("./server/data/comments.json");
 
+router.use(express.json());
+
 /**
  * @swagger
  *  definitions:
