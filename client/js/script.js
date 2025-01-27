@@ -252,7 +252,16 @@ function showRecipeView(recipe_id) {
   })
     .then((res) => res.json())
     .then((res) => {
-      return res;
+      document.getElementById("modalCommentsResult").innerHTML = "";
+
+      console.log(res);
+      for (const message of res) {
+        document.getElementById(
+          "modalCommentsResult"
+        ).innerHTML += `<div class="row mx-2 my-2 py-3 border align-middle">
+                <div class="comment align-middle">${message["message"]}</div>
+              </div>`;
+      }
     });
 
   fetch(`/api/recipe/get?recipe_id=${recipe_id}`, {
