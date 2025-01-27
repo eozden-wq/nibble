@@ -10,16 +10,13 @@ const API_URL = "http://localhost:3000";
 
 const error_messages = {
   SERVER_ERROR: `<div class="message">
-      <div
-        class="inner-message alert alert-danger alert-dismissible fade show"
-        role="alert"
-      >
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <strong>Server Connection Error:</strong> Hey, sorry about that, there
         seems to be a problem with our servers :)
         <button
           type="button"
           class="btn-close"
-          data-dismiss="alert"
+          data-bs-dismiss="alert"
           aria-label="Close"
         ></button>
       </div>
@@ -244,7 +241,11 @@ document
       }
     )
       .then((res) => res.json())
-      .then((response) => construct_search_cards(response));
+      .then((response) => construct_search_cards(response))
+      .catch((err) => {
+        console.log(err);
+        document.body.innerHTML += error_messages["SERVER_ERROR"];
+      });
   });
 
 function submitComment(in_id) {
