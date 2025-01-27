@@ -260,7 +260,9 @@ function submitComment(in_id) {
       recipe_id: in_id,
       message: document.getElementById("modalCommentTxt").value,
     }),
-  }).then((res) => console.log(res.json()));
+  }).then((res) => console.log(res.json())).catch((err) => {
+    document.body.innerHTML += error_messages["SERVER_ERROR"];
+  });
 }
 
 function showRecipeView(recipe_id) {
@@ -280,6 +282,9 @@ function showRecipeView(recipe_id) {
                 <div class="comment align-middle">${message["message"]}</div>
               </div>`;
       }
+    }).error((err) => {
+      console.error(err);
+      document.body.innerHTML += error_messages["SERVER_ERROR"];
     });
 
   document
@@ -324,5 +329,7 @@ function showRecipeView(recipe_id) {
 
       const modal = new bootstrap.Modal(document.getElementById("cardModal"));
       modal.show();
+    }).catch((err) => {
+      document.body.innerHTML += error_messages["SERVER_ERROR"];
     });
 }
