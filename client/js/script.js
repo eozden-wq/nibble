@@ -227,39 +227,8 @@ document
       });
   });
 
-function submitComment(in_id) {
-  console.log(document.getElementById("modalCommentTxt").value);
-  fetch("/api/comment/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      recipe_id: in_id,
-      message: document.getElementById("modalCommentTxt").value,
-    }),
-  })
-    .then((res) => res.json())
-    .then((body) => {
-      if (body["code"] === 200) {
-        showAlert(
-          "success",
-          "Your comment has successfully been added to this recipe!"
-        );
-        document.getElementById("modalCommentForm").reset();
-        // update comments view
-      }
-    })
-    .catch((err) => {
-      showAlert(
-        "warning",
-        "Hey, sorry about that, there seems to be a problem with our servers :)"
-      );
-    });
-}
-
-function showRecipeView(recipe_id) {
-  let comments = fetch(`/api/comment/get?id=${recipe_id}`, {
+async function update_comments(id) {
+  await fetch(`/api/comment/get?id=${id}`, {
     method: "GET",
     headers: { Accept: "application/json" },
   })
@@ -283,6 +252,42 @@ function showRecipeView(recipe_id) {
         "Hey, sorry about that, there seems to be a problem with our servers :)"
       );
     });
+}
+
+function submitComment(in_id) {
+  console.log(document.getElementById("modalCommentTxt").value);
+  fetch("/api/comment/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      recipe_id: in_id,
+      message: document.getElementById("modalCommentTxt").value,
+    }),
+  })
+    .then((res) => res.json())
+    .then((body) => {
+      if (body["code"] === 200) {
+        showAlert(
+          "success",
+          "Your comment has successfully been added to this recipe!"
+        );
+        document.getElementById("modalCommentForm").reset();
+        // update comments view
+        update_comments(in_id);
+      }
+    })
+    .catch((err) => {
+      showAlert(
+        "warning",
+        "Hey, sorry about that, there seems to be a problem with our servers :)"
+      );
+    });
+}
+
+function showRecipeView(recipe_id) {
+  update_comments(recipe_id);
 
   document
     .getElementById("modalCommentForm")
