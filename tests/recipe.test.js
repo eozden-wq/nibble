@@ -2,35 +2,47 @@
 
 const request = require("supertest");
 const app = require("../server/app.js");
+const yup = require("yup");
 
-jest.mock("../server/data/recipes.json", () => [
-  {
-    id: 0,
-    dish_name: "Risotto",
-    author: "Gordon Ramsay",
-    description: "Nicest Risotto to have ever been made",
-    instructions: ["Make Risotto"],
-    ingredients: ["Rice"],
-    image_path: null,
-  },
-]);
+let recipeSchema = yup.object().shape({
+  id: yup.number().nonNullable().required(),
+  dish_name: yup.string().required("Dish name is required"),
+  author: yup.string().required("Author of the recipe is required"),
+  description: yup.string().required("Description is required"),
+  instructions: yup
+    .array()
+    .of(yup.string().required("Instruction can't be empty"))
+    .required("Instructions are required"),
+  ingredients: yup
+    .array()
+    .of(yup.string().required("Ingredients can't be empty"))
+    .required("Instructions are required"),
+});
+
+let error400Schema = yup.object().shape({
+  code: yup.number(400).required(),
+  message: yup.string().required(),
+});
 
 describe("Testing Recipe-related API Endpoints", () => {
   describe("GET /api/recipe/get", () => {
-    test("api.recipe.get should return a 200 response for valid input id", () => {
-      return request(app)
-        .get("/api/recipe/get")
-        .query({ recipe_id: 3 })
-        .expect(200);
+    test("api.recipe.get should return a 200 response and valid schema for valid input id", () => {
+      let req = request(app).get("/api/recipe/get").query({ recipe_id: 3 });
+      return req.expect(200).then((res) => {
+        expect(recipeSchema.validate(res.body));
+      });
     });
 
-    test("api.recipe.get should return a 200 response for input id = 0", () => {
+    test("api.recipe.get should return a 200 response and a valid recipe body for input id = 0", () => {
       return request(app)
         .get("/api/recipe/get")
         .query({
           recipe_id: 0,
         })
-        .expect(200);
+        .expect(200)
+        .then((res) => {
+          expect(recipeSchema.validate(res.body));
+        });
     });
 
     test("api.recipe.get returns 400 for out-of-index id", () => {
@@ -39,7 +51,10 @@ describe("Testing Recipe-related API Endpoints", () => {
         .query({
           recipe_id: 10000,
         })
-        .expect(400);
+        .expect(400)
+        .then((res) => {
+          expect(error400Schema.validate(res.body));
+        });
     });
 
     test("api.recipe.get returns 400 for negative id", () => {
@@ -48,7 +63,10 @@ describe("Testing Recipe-related API Endpoints", () => {
         .query({
           recipe_id: -1,
         })
-        .expect(400);
+        .expect(400)
+        .then((res) => {
+          expect(error400Schema.validate(res.body));
+        });
     });
 
     test("api.recipe.get returns 400 for non-number id", () => {
@@ -57,14 +75,22 @@ describe("Testing Recipe-related API Endpoints", () => {
         .query({
           recipe_id: "Hello, World!",
         })
-        .expect(400);
+        .expect(400)
+        .then((res) => {
+          expect(error400Schema.validate(res.body));
+        });
     });
   });
 
   describe("GET /api/recipe/random", () => {
     // Tests regarding the random route
     test("api.recipe.random should return a 200 response and a valid recipe", () => {
-      return request(app).get("/api/recipe/random").expect(200);
+      return request(app)
+        .get("/api/recipe/random")
+        .expect(200)
+        .then((res) => {
+          expect(recipeSchema.validate(res.body));
+        });
     });
   });
 
@@ -73,31 +99,45 @@ describe("Testing Recipe-related API Endpoints", () => {
       return request(app)
         .get("/api/recipe/search")
         .query({ key: "Chocolate", field: "dish_name" })
-        .expect(200);
+        .expect(200)
+        .then((res) => {
+          expect(yup.array().of(recipeSchema).validate(res.body));
+        });
     });
     test("api.recipe.search should return a 200 response for a valid key and field passed, but no search results found", () => {
       return request(app)
         .get("/api/recipe/search")
         .query({
-          key: "ads;liahsgakjfhgasfjlgkahsdfklajsdhfalksjdfasdlkfj",
+          key: "a;sodfhas;gbjahsglkjajsfgflkajshdfasldfh",
           field: "dish_name",
         })
-        .expect(200);
+        .expect(200, []);
     });
     test("api.recipe.search should return a 400 response for no key but field", () => {
       return request(app)
         .get("/api/recipe/search")
         .query({ field: "dish_name" })
-        .expect(400);
+        .expect(400)
+        .then((res) => {
+          expect(error400Schema.validate(res.body));
+        });
     });
     test("api.recipe.search should return a 400 response for key but no field", () => {
       return request(app)
         .get("/api/recipe/search")
         .query({ key: "Chocolate" })
-        .expect(400);
+        .expect(400)
+        .then((res) => {
+          expect(error400Schema.validate(res.body));
+        });
     });
     test("api.recipe.search should return a 400 response for no key and no field", () => {
-      return request(app).get("/api/recipe/search").expect(400);
+      return request(app)
+        .get("/api/recipe/search")
+        .expect(400)
+        .then((res) => {
+          expect(error400Schema.validate(res.body));
+        });
     });
     test("api.recipe.search should return 200 with empty array for non-existant field", () => {
       return request(app)
