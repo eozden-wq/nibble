@@ -313,6 +313,42 @@ function showRecipeView(recipe_id) {
       let img_path = "/imgs/404.webp";
       if (res["image_path"] !== null) {
         img_path = `/api/recipe/img/${res["image_path"]}`;
+      } else {
+        document.getElementById("recipeModalImg").style.cursor = "pointer";
+        document
+          .getElementById("recipeModalImg")
+          .addEventListener("click", () => {
+            console.log("hit");
+            document.getElementById("modalImgUpload").click();
+          });
+
+        let form = document.getElementById("modalImgUploadForm");
+        let formData = new FormData(form);
+        let imgUpload = document.getElementById("modalImgUpload");
+        formData.append("recipe_img", imgUpload.files[0]);
+
+        console.log(formData);
+
+        fetch(`/api/recipe/img/add?id=${recipe_id}`, {
+          method: "POST",
+          Accept: "application/json",
+          body: formData,
+        })
+          .then((res) => res.json())
+          .then((res) => {
+            if (res["code"] === 200) {
+              const reader = new FileReader();
+              reader.readasDataURL(
+                document.getElementById("modalImgUpload").files[0]
+              );
+            }
+          })
+          .catch((err) =>
+            showAlert(
+              "warning",
+              "Hey, sorry about that, there seems to be a problem with our servers :)"
+            )
+          );
       }
       document.getElementById("recipeModalImg").src = img_path;
       document.getElementById(
@@ -338,6 +374,7 @@ function showRecipeView(recipe_id) {
       modal.show();
     })
     .catch((err) => {
+      console.log(err);
       showAlert(
         "warning",
         "Hey, sorry about that, there seems to be a problem with our servers :)"

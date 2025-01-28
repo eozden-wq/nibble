@@ -276,10 +276,19 @@
                   <img
                     src=""
                     id="recipeModalImg"
-                    class="modal-img"
+                    class="modal-img img-fluid rounded"
+                    name="recipe_img"
                     alt="recipe_img"
                     srcset=""
                   />
+                  <form id="modalImgUploadForm" action="POST">
+                    <input
+                      type="file"
+                      id="modalImgUpload"
+                      class="form-control d-none"
+                      accept="image/*"
+                    />
+                  </form>
                 </div>
                 <div class="col">
                   <p id="recipeModalDesc"></p>
