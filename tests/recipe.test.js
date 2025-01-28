@@ -1,5 +1,20 @@
 const request = require('supertest');
-const app = require('../server/app.js')
+const app = require('../server/app.js');
+
+jest.mock('../server/data/recipes.json', () => [{
+    "id": 0,
+    "dish_name": "Risotto",
+    "author": "Gordon Ramsay",
+    "description": "Nicest Risotto to have ever been made",
+    "instructions": [
+        "Make Risotto"
+    ],
+    "ingredients": [
+        "Rice"
+    ],
+    "image_path": null
+}]);
+
 
 describe('Testing Recipe-related API Endpoints', () => {
     describe('GET /api/recipe/get', () => {
