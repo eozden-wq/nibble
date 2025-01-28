@@ -1,3 +1,5 @@
+"use strict";
+
 const request = require("supertest");
 const app = require("../server/app.js");
 
@@ -16,6 +18,13 @@ jest.mock("../server/data/recipes.json", () => [
 describe("Testing Recipe-related API Endpoints", () => {
   describe("GET /api/recipe/get", () => {
     test("api.recipe.get should return a 200 response for valid input id", () => {
+      return request(app)
+        .get("/api/recipe/get")
+        .query({ recipe_id: 3 })
+        .expect(200);
+    });
+
+    test("api.recipe.get should return a 200 response for input id = 0", () => {
       return request(app)
         .get("/api/recipe/get")
         .query({
