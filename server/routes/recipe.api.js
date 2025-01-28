@@ -32,10 +32,10 @@ const storage_edit = multer.diskStorage({
 });
 
 const upload = multer({
-  storage: storage
+  storage: storage,
 });
 const upload_edit = multer({
-  storage: storage_edit
+  storage: storage_edit,
 });
 
 function json_response(code, message) {

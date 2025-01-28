@@ -63,9 +63,18 @@ describe("Testing Recipe-related API Endpoints", () => {
 
   describe("GET /api/recipe/random", () => {
     // Tests regarding the random route
+    test("api.recipe.random should return a 200 response and a valid recipe", () => {
+      return request(app).get("/api/recipe/random").expect(200);
+    });
   });
 
-  describe("GET /api/recipe/search", () => {});
+  describe("GET /api/recipe/search", () => {
+    test("api.recipe.search should return a 200 response for a valid key and value passed", () => {});
+    test("api.recipe.search should return a 200 response for a valid key and value passed, but no search results found", () => {});
+    test("api.recipe.search should return a 400 response for no key but value", () => {});
+    test("api.recipe.search should return a 400 response for key but no value", () => {});
+    test("api.recipe.search should return a 400 response for no key and no value", () => {});
+  });
 
   describe("POST /api/recipe/create", () => {});
 
