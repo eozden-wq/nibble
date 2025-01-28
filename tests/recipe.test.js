@@ -69,11 +69,42 @@ describe("Testing Recipe-related API Endpoints", () => {
   });
 
   describe("GET /api/recipe/search", () => {
-    test("api.recipe.search should return a 200 response for a valid key and value passed", () => {});
-    test("api.recipe.search should return a 200 response for a valid key and value passed, but no search results found", () => {});
-    test("api.recipe.search should return a 400 response for no key but value", () => {});
-    test("api.recipe.search should return a 400 response for key but no value", () => {});
-    test("api.recipe.search should return a 400 response for no key and no value", () => {});
+    test("api.recipe.search should return a 200 response for a valid key and field passed", () => {
+      return request(app)
+        .get("/api/recipe/search")
+        .query({ key: "Chocolate", field: "dish_name" })
+        .expect(200);
+    });
+    test("api.recipe.search should return a 200 response for a valid key and field passed, but no search results found", () => {
+      return request(app)
+        .get("/api/recipe/search")
+        .query({
+          key: "ads;liahsgakjfhgasfjlgkahsdfklajsdhfalksjdfasdlkfj",
+          field: "dish_name",
+        })
+        .expect(200);
+    });
+    test("api.recipe.search should return a 400 response for no key but field", () => {
+      return request(app)
+        .get("/api/recipe/search")
+        .query({ field: "dish_name" })
+        .expect(400);
+    });
+    test("api.recipe.search should return a 400 response for key but no field", () => {
+      return request(app)
+        .get("/api/recipe/search")
+        .query({ key: "Chocolate" })
+        .expect(400);
+    });
+    test("api.recipe.search should return a 400 response for no key and no field", () => {
+      return request(app).get("/api/recipe/search").expect(400);
+    });
+    test("api.recipe.search should return 400 for non-existant field", () => {
+      return request(app)
+        .get("/api/recipe/search")
+        .query({ key: "Chocolate", field: "some_stuff_that_doesnt_exist" })
+        .expect(400);
+    });
   });
 
   describe("POST /api/recipe/create", () => {});
