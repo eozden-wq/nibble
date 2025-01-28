@@ -31,8 +31,12 @@ const storage_edit = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
-const upload_edit = multer({ storage: storage_edit });
+const upload = multer({
+  storage: storage
+});
+const upload_edit = multer({
+  storage: storage_edit
+});
 
 function json_response(code, message) {
   return {
@@ -130,14 +134,14 @@ router.use(express.json());
  */
 router.get("/get", (req, res) => {
   try {
-    let data = streamer.read(req.query.recipe_id);
+    const recipe_id = Number(req.query.recipe_id);
+    let data = streamer.read(recipe_id);
     res.status(200);
     res.json(data);
   } catch (err) {
     res.status(400);
     res.json(json_response(400, "Malformed request"));
   }
-  res.end();
 });
 
 /**
