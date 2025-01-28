@@ -3,6 +3,8 @@
 const request = require("supertest");
 const app = require("../server/app.js");
 const yup = require("yup");
+const mock_fs = require("mock-fs");
+const FormData = require("form-data");
 
 let recipeSchema = yup.object().shape({
   id: yup.number().nonNullable().required(),
@@ -148,7 +150,41 @@ describe("Testing Recipe-related API Endpoints", () => {
   });
 
   describe("POST /api/recipe/create", () => {
-    test("api.recipe.create should give a 200 response for a valid recipe schema input without image", () => {});
+    beforeEach(() => {
+      mock_fs({
+        "./server/data": {
+          "recipes.json": JSON.stringify([]),
+        },
+      });
+    });
+
+    afterEach(() => {
+      mock_fs.restore();
+    });
+
+    let data = {
+      dish_name: "Chocolate Cake",
+      author: "Emre Ozden",
+      description: "A decadent, rich, luxurious chocolate cake",
+      instructions: ["Make Cake"],
+      ingredients: ["Chocolate"],
+    };
+    let formData = new FormData();
+    formData.append("json", JSON.stringify(data));
+
+    test("api.recipe.create should give a 200 response for a valid recipe schema input without image", async () => {
+      const response = await request(app)
+        .post("/api/recipe/create")
+        .set(
+          "Content-Type",
+          `multipart/form-data; boundary=${formData._boundary}`
+        )
+        .set("Content-Length", formData.getLengthSync())
+        .send(formData.getBuffer());
+
+      expect(response.status).toBe(200);
+      expect(response.body.message).toBe("Success");
+    });
     test("api.recipe.create should give a 200 response for a valid recipe schema input with an image", () => {});
     test("api.recipe.craete should give a 400 response for a valid recipe schema and a non-image file upload", () => {});
     test("api.recipe.craete should give a 400 response for an invalid recipe schema and a non-image file upload", () => {});
