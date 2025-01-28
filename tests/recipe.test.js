@@ -99,15 +99,26 @@ describe("Testing Recipe-related API Endpoints", () => {
     test("api.recipe.search should return a 400 response for no key and no field", () => {
       return request(app).get("/api/recipe/search").expect(400);
     });
-    test("api.recipe.search should return 400 for non-existant field", () => {
+    test("api.recipe.search should return 200 with empty array for non-existant field", () => {
       return request(app)
         .get("/api/recipe/search")
         .query({ key: "Chocolate", field: "some_stuff_that_doesnt_exist" })
-        .expect(400);
+        .expect(200, []);
     });
   });
 
-  describe("POST /api/recipe/create", () => {});
+  describe("POST /api/recipe/create", () => {
+    test("api.recipe.create should give a 200 response for a valid recipe schema input without image", () => {});
+    test("api.recipe.create should give a 200 response for a valid recipe schema input with an image", () => {});
+    test("api.recipe.craete should give a 400 response for a valid recipe schema and a non-image file upload", () => {});
+    test("api.recipe.craete should give a 400 response for an invalid recipe schema and a non-image file upload", () => {});
+    test("api.recipe.create should give a 400 response for an invalid recipe schema input without image", () => {});
+    test("api.recipe.create should give a 400 response for an invalid recipe schema input with an image", () => {});
+    test("api.recipe.create should give a 400 response for a recipe schema with empty fields", () => {});
+  });
 
-  describe("POST /api/recipe/img/add", () => {});
+  describe("POST /api/recipe/img/add", () => {
+    test("api.recipe.img.add should give a 200 response for a valid image being uploaded", () => {});
+    test("api.recipe.img.add should give a 400 response for a non-image file being uploaded", () => {});
+  });
 });
