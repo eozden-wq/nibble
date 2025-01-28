@@ -8,73 +8,16 @@ let CURRENT_VIEW = random_view;
 
 const API_URL = "http://localhost:3000";
 
-const error_messages = {
-  SERVER_ERROR: `<div class="message">
-      <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong>Server Connection Error:</strong> Hey, sorry about that, there
-        seems to be a problem with our servers :)
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-    </div>`,
-  OFFLINE: `<div class="message">
-      <div
-        class="inner-message alert alert-warning alert-dismissible fade show"
-        role="alert"
-      >
-        <strong>Network Error:</strong> There seems to be a problem with your
-        network. Please check your connection :)
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-    </div>`,
-  BACK_ONLINE: `    <div class="message">
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>Welcome back!</strong> You're back online! You may continue
-        using Nibble
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-    </div>`,
-  RECIPE_CREATE_SUCCESS: `
-  <div class="message">
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>Thank you!</strong> Your recipe has been created!
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-    </div>
-  `,
-  COMMENT_CREATE_SUCCESS: `
-    <div class="message">
-      <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>Thank you!</strong> Your comment has been added to this recipe!
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-    </div>
-  `,
-};
+function showAlert(type, message) {
+  const alertHTML = `
+    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>`;
+  document
+    .getElementById("alert-container")
+    .insertAdjacentHTML("beforeend", alertHTML);
+}
 
 function switch_view(view) {
   CURRENT_VIEW.style = "display: none";
@@ -84,8 +27,8 @@ function switch_view(view) {
 
 let CURRENT_RANDOM_RECIPE_ID = null;
 
-function get_random_recipe() {
-  fetch("http://localhost:3000/api/recipe/random")
+async function get_random_recipe() {
+  await fetch("http://localhost:3000/api/recipe/random")
     .then((res) => res.json())
     .then((body) => {
       document.querySelector("#recipe_title").innerHTML = body["dish_name"];
@@ -105,7 +48,10 @@ function get_random_recipe() {
     })
     .catch((error) => {
       console.log(error);
-      document.body.innerHTML += error_messages["SERVER_ERROR"];
+      showAlert(
+        "warning",
+        "Hey, sorry about that, there seems to be a problem with our servers :)"
+      );
     });
 }
 
@@ -188,22 +134,25 @@ form.addEventListener("submit", async (event) => {
     .then((body) => {
       if (body["code"] === 200) {
         form.reset();
-        document.body.innerHTML += error_messages["RECIPE_CREATE_SUCCESS"];
+        showAlert("success", "Thank you for submitting your recipe!");
       }
     })
     .catch((err) => {
       console.log("hit");
-      document.body.innerHTML += error_messages["SERVER_ERROR"];
+      showAlert("warning");
     });
 });
 
 window.onload = get_random_recipe;
 window.addEventListener("offline", (e) => {
-  document.body.innerHTML += error_messages["OFFLINE"];
+  showAlert(
+    "danger",
+    "It seems like there are some issues with your network. We'll let you know when you're back online"
+  );
 });
 
 window.addEventListener("online", (e) => {
-  document.body.innerHTML += error_messages["BACK_ONLINE"];
+  showAlert("success", "You're back online! You can continue using Nibble!");
 });
 
 function construct_search_cards(results_arr) {
@@ -271,7 +220,10 @@ document
       .then((response) => construct_search_cards(response))
       .catch((err) => {
         console.log(err);
-        document.body.innerHTML += error_messages["SERVER_ERROR"];
+        showAlert(
+          "warning",
+          "Hey, sorry about that, there seems to be a problem with our servers :)"
+        );
       });
   });
 
@@ -290,12 +242,19 @@ function submitComment(in_id) {
     .then((res) => res.json())
     .then((body) => {
       if (body["code"] === 200) {
-        document.body.innerHTML += error_messages["COMMENT_CREATE_SUCCESS"];
+        showAlert(
+          "success",
+          "Your comment has successfully been added to this recipe!"
+        );
         document.getElementById("modalCommentForm").reset();
+        // update comments view
       }
     })
     .catch((err) => {
-      document.body.innerHTML += error_messages["SERVER_ERROR"];
+      showAlert(
+        "warning",
+        "Hey, sorry about that, there seems to be a problem with our servers :)"
+      );
     });
 }
 
@@ -319,7 +278,10 @@ function showRecipeView(recipe_id) {
     })
     .catch((err) => {
       console.error(err);
-      document.body.innerHTML += error_messages["SERVER_ERROR"];
+      showAlert(
+        "warning",
+        "Hey, sorry about that, there seems to be a problem with our servers :)"
+      );
     });
 
   document
@@ -367,6 +329,9 @@ function showRecipeView(recipe_id) {
       modal.show();
     })
     .catch((err) => {
-      document.body.innerHTML += error_messages["SERVER_ERROR"];
+      showAlert(
+        "warning",
+        "Hey, sorry about that, there seems to be a problem with our servers :)"
+      );
     });
 }

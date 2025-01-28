@@ -14,13 +14,27 @@ body {
   padding-right: 2.5em;
 }
 
-.message {
+#alert-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  /* Full-width container */
+  z-index: 1060;
+  /* High z-index to appear above other elements */
+  padding: 10px;
+  /* Optional padding for spacing */
+  pointer-events: none;
+  /* Prevent container from blocking clicks below */
 }
 
+#alert-container .alert {
+  pointer-events: auto;
+  /* Allow interactions with alert elements */
+  margin-bottom: 5px;
+  /* Optional spacing between alerts */
+}
+ 
 .inner-message {
   margin: 0 auto;
 }
@@ -44,4 +58,8 @@ body {
   width: 500px;
   height: auto;
   object-fit: cover;
+}
+
+button {
+  pointer-events: auto;
 }
