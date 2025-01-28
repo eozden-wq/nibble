@@ -14,13 +14,40 @@ body {
   padding-right: 2.5em;
 }
 
-.message {
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#alert-container {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
+  /* Full-width container */
+  z-index: 1060;
+  /* High z-index to appear above other elements */
+  padding: 10px;
+  /* Optional padding for spacing */
+  pointer-events: none;
+  /* Prevent container from blocking clicks below */
 }
 
+#alert-container .alert {
+  pointer-events: auto;
+  /* Allow interactions with alert elements */
+  margin-bottom: 5px;
+  /* Optional spacing between alerts */
+  animation: fadeIn 0.5s ease-in-out;
+}
+ 
 .inner-message {
   margin: 0 auto;
 }
@@ -44,4 +71,8 @@ body {
   width: 500px;
   height: auto;
   object-fit: cover;
+}
+
+button {
+  pointer-events: auto;
 }

@@ -8,39 +8,16 @@ let CURRENT_VIEW = random_view;
 
 const API_URL = "http://localhost:3000";
 
-const error_messages = {
-  SERVER_ERROR: `<div class="message">
-      <div
-        class="inner-message alert alert-danger alert-dismissible fade show"
-        role="alert"
-      >
-        <strong>Server Connection Error:</strong> Hey, sorry about that, there
-        seems to be a problem with our servers :)
-        <button
-          type="button"
-          class="btn-close"
-          data-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-    </div>`,
-  BACK_ONLINE: `<div class="message">
-      <div
-        class="inner-message alert alert-warning alert-dismissible fade show"
-        role="alert"
-      >
-        <strong>Network Error:</strong> There seems to be a problem with your
-        network. Please check your connection :)
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="alert"
-          aria-label="Close"
-        ></button>
-      </div>
-    </div>`,
-  OFFLINE: ``,
-};
+function showAlert(type, message) {
+  const alertHTML = `
+    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+      ${message}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>`;
+  document
+    .getElementById("alert-container")
+    .insertAdjacentHTML("beforeend", alertHTML);
+}
 
 function switch_view(view) {
   CURRENT_VIEW.style = "display: none";
@@ -50,8 +27,8 @@ function switch_view(view) {
 
 let CURRENT_RANDOM_RECIPE_ID = null;
 
-function get_random_recipe() {
-  fetch("http://localhost:3000/api/recipe/random")
+async function get_random_recipe() {
+  await fetch("http://localhost:3000/api/recipe/random")
     .then((res) => res.json())
     .then((body) => {
       document.querySelector("#recipe_title").innerHTML = body["dish_name"];
@@ -71,7 +48,10 @@ function get_random_recipe() {
     })
     .catch((error) => {
       console.log(error);
-      document.body.innerHTML += error_messages["SERVER_ERROR"];
+      showAlert(
+        "warning",
+        "Hey, sorry about that, there seems to be a problem with our servers :)"
+      );
     });
 }
 
@@ -146,40 +126,53 @@ form.addEventListener("submit", async (event) => {
 
   console.log(data);
 
-  fetch("http://localhost:3000/api/recipe/create", {
+  fetch("/api/recipe/create", {
     method: "POST",
     body: data,
   })
-    .then((res) => console.log(res))
+    .then((res) => res.json())
     .then((body) => {
-      console.log(body);
+      if (body["code"] === 200) {
+        form.reset();
+        showAlert("success", "Thank you for submitting your recipe!");
+      }
+    })
+    .catch((err) => {
+      console.log("hit");
+      showAlert("warning");
     });
 });
 
 window.onload = get_random_recipe;
 window.addEventListener("offline", (e) => {
-  document.body.innerHTML += error_messages[0];
+  showAlert(
+    "danger",
+    "It seems like there are some issues with your network. We'll let you know when you're back online"
+  );
 });
 
 window.addEventListener("online", (e) => {
-  document.body.innerHTML += error_messages[1];
+  showAlert("success", "You're back online! You can continue using Nibble!");
 });
 
 function construct_search_cards(results_arr) {
   let search_results_div = document.getElementById("search-results");
-  search_results_div.innerHTML = "";
-  for (const result of results_arr) {
-    console.log(result);
-    // Get the image path for the result
+  if (results_arr.length == 0 || results_arr === undefined) {
+    search_results_div.innerHTML = `<h3 class="text-center">It seems like there aren't any recipes with this name</h3>`;
+  } else {
+    search_results_div.innerHTML = "";
+    for (const result of results_arr) {
+      console.log(result);
+      // Get the image path for the result
 
-    let image_path = "";
-    if (result["image_path"] === null) {
-      image_path = "/imgs/404.webp";
-    } else {
-      image_path = `/api/recipe/img/${result["image_path"]}`;
-    }
+      let image_path = "";
+      if (result["image_path"] === null) {
+        image_path = "/imgs/404.webp";
+      } else {
+        image_path = `/api/recipe/img/${result["image_path"]}`;
+      }
 
-    let card_template = `      
+      let card_template = `      
   <div class="container mt-5">
         <div class="card" onclick=showRecipeView(${result["id"]})>
           <div class="row g-0 align-items-center">
@@ -207,7 +200,8 @@ function construct_search_cards(results_arr) {
       </div>
       `;
 
-    search_results_div.innerHTML += card_template;
+      search_results_div.innerHTML += card_template;
+    }
   }
 }
 
@@ -227,26 +221,18 @@ document
       }
     )
       .then((res) => res.json())
-      .then((response) => construct_search_cards(response));
+      .then((response) => construct_search_cards(response))
+      .catch((err) => {
+        console.log(err);
+        showAlert(
+          "warning",
+          "Hey, sorry about that, there seems to be a problem with our servers :)"
+        );
+      });
   });
 
-function submitComment(in_id) {
-  console.log(in_id);
-  console.log(document.getElementById("modalCommentTxt").value);
-  fetch("/api/comment/create", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      recipe_id: in_id,
-      message: document.getElementById("modalCommentTxt").value,
-    }),
-  }).then((res) => console.log(res.json()));
-}
-
-function showRecipeView(recipe_id) {
-  let comments = fetch(`/api/comment/get?id=${recipe_id}`, {
+async function update_comments(id) {
+  await fetch(`/api/comment/get?id=${id}`, {
     method: "GET",
     headers: { Accept: "application/json" },
   })
@@ -262,11 +248,55 @@ function showRecipeView(recipe_id) {
                 <div class="comment align-middle">${message["message"]}</div>
               </div>`;
       }
+    })
+    .catch((err) => {
+      console.error(err);
+      showAlert(
+        "warning",
+        "Hey, sorry about that, there seems to be a problem with our servers :)"
+      );
     });
+}
+
+function submitComment(in_id) {
+  console.log(document.getElementById("modalCommentTxt").value);
+  fetch("/api/comment/create", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      recipe_id: in_id,
+      message: document.getElementById("modalCommentTxt").value,
+    }),
+  })
+    .then((res) => res.json())
+    .then((body) => {
+      if (body["code"] === 200) {
+        showAlert(
+          "success",
+          "Your comment has successfully been added to this recipe!"
+        );
+        document.getElementById("modalCommentForm").reset();
+        // update comments view
+        update_comments(in_id);
+      }
+    })
+    .catch((err) => {
+      showAlert(
+        "warning",
+        "Hey, sorry about that, there seems to be a problem with our servers :)"
+      );
+    });
+}
+
+function showRecipeView(recipe_id) {
+  update_comments(recipe_id);
 
   document
-    .getElementById("modalRecipeCommentBtn")
-    .addEventListener("click", (event) => {
+    .getElementById("modalCommentForm")
+    .addEventListener("submit", (event) => {
+      event.preventDefault();
       submitComment(recipe_id);
     });
 
@@ -306,5 +336,11 @@ function showRecipeView(recipe_id) {
 
       const modal = new bootstrap.Modal(document.getElementById("cardModal"));
       modal.show();
+    })
+    .catch((err) => {
+      showAlert(
+        "warning",
+        "Hey, sorry about that, there seems to be a problem with our servers :)"
+      );
     });
 }

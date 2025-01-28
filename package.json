@@ -19,6 +19,9 @@
     "url": "https://github.com/eozden-wq/nibble/issues"
   },
   "homepage": "https://github.com/eozden-wq/nibble#readme",
+  "nodemonConfig": {
+    "ignore": ["server/data/*.json"]
+  },
   "devDependencies": {
     "eslint": "^9.17.0",
     "globals": "^15.13.0",

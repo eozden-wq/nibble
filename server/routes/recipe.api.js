@@ -338,6 +338,7 @@ router.post("/create", upload.single("recipe_img"), async (req, res) => {
     }
     let recipe = new Recipe(valid_body);
     streamer.write(recipe);
+    res.json(json_response(200, "Success"));
     res.end();
   } catch (err) {
     console.log(err);

@@ -109,6 +109,7 @@ router.post("/create", async (req, res) => {
     console.error(err);
     res.status(400);
     res.json({ code: 400, message: "Malformed request" });
+    res.end();
   }
 });
 
