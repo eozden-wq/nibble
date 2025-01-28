@@ -60,7 +60,9 @@ let ingredient_count = 1;
 function add_ingredient() {
   ingredient_count += 1;
   let html_str = `<input type="text" name="ingredient${ingredient_count}" class="form-control mt-2" id="ingredientsInput${ingredient_count}">`;
-  document.getElementById("ingredients_input_list").innerHTML += html_str;
+  document
+    .getElementById("ingredients_input_list")
+    .insertAdjacentHTML("beforeend", html_str);
 }
 
 let instruction_count = 1;
@@ -68,7 +70,9 @@ let instruction_count = 1;
 function add_instruction() {
   instruction_count += 1;
   let html_str = `<input type="text" name="instruction${instruction_count}" class="form-control mt-2" id=\"instructionsInput${instruction_count}\">`;
-  document.getElementById("instructions_input_list").innerHTML += html_str;
+  document
+    .getElementById("instructions_input_list")
+    .insertAdjacentHTML("beforeend", html_str);
 }
 
 let form = document.getElementById("dataForm");
