@@ -157,19 +157,22 @@ window.addEventListener("online", (e) => {
 
 function construct_search_cards(results_arr) {
   let search_results_div = document.getElementById("search-results");
-  search_results_div.innerHTML = "";
-  for (const result of results_arr) {
-    console.log(result);
-    // Get the image path for the result
+  if (results_arr.length == 0 || results_arr === undefined) {
+    search_results_div.innerHTML = `<h3 class="text-center">It seems like there aren't any recipes with this name</h3>`;
+  } else {
+    search_results_div.innerHTML = "";
+    for (const result of results_arr) {
+      console.log(result);
+      // Get the image path for the result
 
-    let image_path = "";
-    if (result["image_path"] === null) {
-      image_path = "/imgs/404.webp";
-    } else {
-      image_path = `/api/recipe/img/${result["image_path"]}`;
-    }
+      let image_path = "";
+      if (result["image_path"] === null) {
+        image_path = "/imgs/404.webp";
+      } else {
+        image_path = `/api/recipe/img/${result["image_path"]}`;
+      }
 
-    let card_template = `      
+      let card_template = `      
   <div class="container mt-5">
         <div class="card" onclick=showRecipeView(${result["id"]})>
           <div class="row g-0 align-items-center">
@@ -197,7 +200,8 @@ function construct_search_cards(results_arr) {
       </div>
       `;
 
-    search_results_div.innerHTML += card_template;
+      search_results_div.innerHTML += card_template;
+    }
   }
 }
 
