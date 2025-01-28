@@ -159,6 +159,18 @@ describe("Testing Recipe-related API Endpoints", () => {
       ingredients: ["Chocolate"],
     };
 
+    let invalid_data = {
+      dish: "Not Chocolate Cake",
+      evil_author: "Evil Emre",
+    };
+    let empty_data = {
+      dish_name: "",
+      author: "",
+      description: "",
+      instructions: [],
+      ingredients: [""],
+    };
+
     beforeEach(() => {
       mock_fs({
         "./server/data": {
@@ -173,14 +185,13 @@ describe("Testing Recipe-related API Endpoints", () => {
 
     test("api.recipe.create should give a 200 response for a valid recipe schema input without image", async () => {
       let formData = new FormData();
-      formData = new FormData();
       formData.append("json", JSON.stringify(data));
 
       const response = await request(app)
         .post("/api/recipe/create")
         .set(
           "Content-Type",
-          `multipart/form-data; boundary=${formData._boundary}`
+          `multipart/form-data; boundary=${formData.getBoundary()}`
         )
         .set("Content-Length", formData.getLengthSync())
         .send(formData.getBuffer());
@@ -190,7 +201,6 @@ describe("Testing Recipe-related API Endpoints", () => {
     });
     test("api.recipe.create should give a 200 response for a valid recipe schema input with an image", async () => {
       let formData = new FormData();
-      formData = new FormData();
       formData.append("json", JSON.stringify(data));
 
       formData.append("recipe_img", Buffer.from("./uploads/imgs/test.jpg"));
@@ -199,7 +209,7 @@ describe("Testing Recipe-related API Endpoints", () => {
         .post("/api/recipe/create")
         .set(
           "Content-Type",
-          `multipart/form-data; boundary=${formData._boundary}`
+          `multipart/form-data; boundary=${formData.getBoundary()}`
         )
         .set("Content-Length", formData.getLengthSync())
         .send(formData.getBuffer());
@@ -210,7 +220,6 @@ describe("Testing Recipe-related API Endpoints", () => {
 
     test("api.recipe.create should give a 400 response for a valid recipe schema and a non-image file upload", async () => {
       let formData = new FormData();
-      formData = new FormData();
       formData.append("json", JSON.stringify(data));
 
       formData.append("recipe_img", Buffer.from("./uploads/file.txt"));
@@ -219,7 +228,7 @@ describe("Testing Recipe-related API Endpoints", () => {
         .post("/api/recipe/create")
         .set(
           "Content-Type",
-          `multipart/form-data; boundary=${formData._boundary}}`
+          `multipart/form-data; boundary=${formData.getBoundary()}}`
         )
         .set("Content-Length", formData.getLengthSync())
         .send(formData.getBuffer());
@@ -227,10 +236,73 @@ describe("Testing Recipe-related API Endpoints", () => {
       expect(response.status).toBe(400);
       expect(response.body.message).toBe("Malformed request");
     });
-    test("api.recipe.craete should give a 400 response for an invalid recipe schema and a non-image file upload", () => {});
-    test("api.recipe.create should give a 400 response for an invalid recipe schema input without image", () => {});
-    test("api.recipe.create should give a 400 response for an invalid recipe schema input with an image", () => {});
-    test("api.recipe.create should give a 400 response for a recipe schema with empty fields", () => {});
+    test("api.recipe.craete should give a 400 response for an invalid recipe schema and a non-image file upload", async () => {
+      let formData = new FormData();
+      formData.append("json", JSON.stringify(invalid_data));
+
+      formData.append("recipe_img", Buffer.from("./uploads/file.txt"));
+
+      const response = await request(app)
+        .post("/api/recipe/create")
+        .set(
+          "Content-Type",
+          `multipart/form-data; boundary=${formData.getBoundary()}`
+        )
+        .set("Content-Length", formData.getLengthSync())
+        .send(formData.getBuffer());
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Malformed request");
+    });
+    test("api.recipe.create should give a 400 response for an invalid recipe schema input without image", async () => {
+      let formData = new FormData();
+      formData.append("json", JSON.stringify(invalid_data));
+
+      const response = await request(app)
+        .post("/api/recipe/create")
+        .set(
+          "Content-Type",
+          `multipart/form-data; boundary=${formData.getBoundary()}`
+        )
+        .set("Content-Length", formData.getLengthSync())
+        .send(formData.getBuffer());
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Malformed request");
+    });
+    test("api.recipe.create should give a 400 response for an invalid recipe schema input with an image", async () => {
+      let formData = new FormData();
+      formData.append("json", JSON.stringify(invalid_data));
+      formData.append("recipe_img", Buffer.from("./uploads/imgs/test.jpg"));
+
+      const response = await request(app)
+        .post("/api/recipe/create")
+        .set(
+          "Content-Type",
+          `multipart/form-data; boundary=${formData.getBoundary()}`
+        )
+        .set("Content-Length", formData.getLengthSync())
+        .send(formData.getBuffer());
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Malformed request");
+    });
+    test("api.recipe.create should give a 400 response for a recipe schema with empty fields", async () => {
+      let formData = new FormData();
+      formData.append("json", JSON.stringify(empty_data));
+
+      const response = await request(app)
+        .post("/api/recipe/create")
+        .set(
+          "Content-Type",
+          `multipart/form-data; boundary=${formData.getBoundary()}`
+        )
+        .set("Content-Length", formData.getLengthSync())
+        .send(formData.getBuffer());
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe("Malformed request");
+    });
   });
 
   describe("POST /api/recipe/img/add", () => {

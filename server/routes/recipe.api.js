@@ -340,30 +340,36 @@ router.post("/img/add", upload_edit.single("recipe_img"), (req, res) => {
  *                      items:
  *                          type: string
  */
-router.post("/create", (req, res) => {
-  upload(req, res, (err) => {
+router.post("/create", async (req, res) => {
+  upload(req, res, async (err) => {
     try {
       if (err) {
-        throw new Error("Couldn't upload file");
+        throw new Error("File upload is invalid");
       }
-      let recipe_data = JSON.parse(req.body["json"]);
-      const valid_body = createRecipeSchema.validate(recipe_data, {
-        abortEarly: false,
-      });
-      if (req.file === undefined) {
-        valid_body["image_path"] = null;
-      } else {
-        valid_body["image_path"] = `recipe-${streamer.get_size()}${path.extname(
+      let recipe_data;
+      try {
+        recipe_data = JSON.parse(req.body["json"]);
+        await createRecipeSchema.validate(recipe_data, { abortEarly: false });
+      } catch (validationError) {
+        return res.status(400).json(json_response(400, "Malformed request"));
+      }
+      if (req.file) {
+        recipe_data[
+          "image_path"
+        ] = `recipe-${streamer.get_size()}${path.extname(
           req.file.originalname
         )}`;
+      } else {
+        recipe_data["image_path"] = null;
       }
-      let recipe = new Recipe(valid_body);
+
+      const recipe = new Recipe(recipe_data);
       streamer.write(recipe);
-      res.json(json_response(200, "Success"));
+
+      return res.status(200).json(json_response(200, "Success"));
     } catch (err) {
-      console.log(err);
-      res.status(400);
-      res.json(json_response(400, "Malformed request"));
+      console.error(err);
+      return res.status(400).json(json_response(400, "Malformed request"));
     }
   });
 });
