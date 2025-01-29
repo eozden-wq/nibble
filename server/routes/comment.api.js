@@ -99,9 +99,9 @@ router.get("/get", (req, res) => {
  *          schema:
  *            $ref: '#/definitions/Comment'
  */
-router.post("/create", async (req, res) => {
+router.post("/create", (req, res) => {
   try {
-    let valid_body = await createCommentSchema.validate(req.body, {
+    let valid_body = createCommentSchema.validateSync(req.body, {
       abortEarly: false,
     });
     let comment = new Comment(valid_body);

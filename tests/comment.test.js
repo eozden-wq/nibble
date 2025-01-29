@@ -1,6 +1,7 @@
 const request = require("supertest");
 const app = require("../server/app");
 const yup = require("yup");
+const mock_fs = require("mock-fs");
 
 const commentSchema = yup.object().shape({
   recipe_id: yup.number().nonNullable().required(),
@@ -53,7 +54,19 @@ describe("Testing Comment-related API Endpoints", () => {
     });
   });
   describe("POST /api/comment/create", () => {
-    test("api.comment.create should give a 200 response for a valid comment", () => {});
+    test("api.comment.create should give a 200 response for a valid comment", async () => {
+      let response = await request(app)
+        .post("/api/comment/create")
+        .send({ recipe_id: 1, message: "Loved this recipe!" })
+        .set("Accept", "application/json");
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toEqual({
+        code: 200,
+        message: "Success",
+      });
+    });
+
     test("api.comment.create should give a 200 response for a comment with a non-string message", () => {});
     test("api.comment.create should give a 400 response for a comment with no specified id", () => {});
     test("api.comment.create should give a 400 response for a comment with no message", () => {});
