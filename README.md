@@ -52,6 +52,10 @@ If you want to continuously run tests, run:
 npm run test:watch
 ```
 
+# Documentation
+
+To view the documentation for the API-endpoints, you can view the `http://localhost:3000/docs` page when the server is running
+
 # Reviewing My Code
 
 TODO
