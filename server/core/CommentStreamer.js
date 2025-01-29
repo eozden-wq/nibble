@@ -4,16 +4,17 @@ const Comment = require("./Comment");
 class CommentStreamer {
   constructor(comment_file) {
     this.comment_file = comment_file;
-    this.comments = [];
-    fs.readFile(comment_file, (err, data) => {
-      if (err) throw err;
-      this.comments = JSON.parse(data);
-    });
+    const file_data = fs.readFileSync(this.comment_file, "utf8");
+    this.comments = JSON.parse(file_data);
   }
 
   getAllComments(recipe_id) {
     try {
       let res = [];
+
+      if (recipe_id < 0 || isNaN(recipe_id)) {
+        throw TypeError;
+      }
 
       for (let comment of this.comments) {
         if (comment["recipe_id"] === Number(recipe_id)) {
@@ -27,12 +28,19 @@ class CommentStreamer {
     }
   }
 
-  write(comment) {
+  write(comment, recipes_file) {
     try {
       if (!(comment instanceof Comment)) {
         throw TypeError;
       }
 
+      const recipes = fs.readFileSync(recipes_file, "utf-8");
+      let recipes_json = JSON.parse(recipes);
+
+      if (!recipes_json.some((recipe) => recipe.id === comment.recipe_id)) {
+        console.log("hit");
+        throw Error("This recipe doesn't exist!");
+      }
       this.comments.push(comment);
       fs.writeFileSync(this.comment_file, JSON.stringify(this.comments));
     } catch (err) {

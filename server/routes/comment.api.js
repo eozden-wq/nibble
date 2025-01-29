@@ -10,7 +10,10 @@ let streamer = new CommentSerializer("./server/data/comments.json");
 
 const yup = require("yup");
 const createCommentSchema = yup.object().shape({
-  recipe_id: yup.number().required("The comment must correspond to a Recipe"),
+  recipe_id: yup
+    .number()
+    .positive()
+    .required("The comment must correspond to a Recipe"),
   message: yup.string().trim().nonNullable().required(),
 });
 
@@ -55,9 +58,8 @@ router.use(express.json());
 router.get("/get", (req, res) => {
   try {
     res.status(200);
-    res.json(streamer.getAllComments(req.query.id));
+    return res.json(streamer.getAllComments(req.query.id));
   } catch (err) {
-    console.error(err);
     res.status(400);
     res.json({ code: 400, message: "Malformed request" });
   }
@@ -96,17 +98,16 @@ router.get("/get", (req, res) => {
  *          schema:
  *            $ref: '#/definitions/Comment'
  */
-router.post("/create", async (req, res) => {
+router.post("/create", (req, res) => {
   try {
-    let valid_body = await createCommentSchema.validate(req.body, {
+    let valid_body = createCommentSchema.validateSync(req.body, {
       abortEarly: false,
     });
     let comment = new Comment(valid_body);
-    streamer.write(comment);
+    streamer.write(comment, "./server/data/recipes.json");
     res.json({ code: 200, message: "Success" });
     res.end();
   } catch (err) {
-    console.error(err);
     res.status(400);
     res.json({ code: 400, message: "Malformed request" });
     res.end();

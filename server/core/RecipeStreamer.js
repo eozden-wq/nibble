@@ -13,12 +13,8 @@ const Fuse = require("fuse.js");
 class RecipeStreamer {
   constructor(data_file) {
     this.data_file = data_file;
-    this.data = [];
-    fs.readFile(data_file, (err, data) => {
-      if (err) throw err;
-
-      this.data = JSON.parse(data);
-    });
+    const file_data = fs.readFileSync(data_file, 'utf8');
+    this.data = JSON.parse(file_data);
   }
 
   /**
