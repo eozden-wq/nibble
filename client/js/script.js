@@ -321,6 +321,7 @@ function showRecipeView(recipe_id) {
       const recipeModalImg = document.getElementById("recipeModalImg");
       const modalImgUpload = document.getElementById("modalImgUpload");
 
+      // Clone the old recipeModalImage to newRecipeModalImg to remove all event listeners
       recipeModalImg.replaceWith(recipeModalImg.cloneNode(true));
       const newRecipeModalImg = document.getElementById("recipeModalImg");
 
@@ -332,7 +333,7 @@ function showRecipeView(recipe_id) {
           modalImgUpload.click();
         });
 
-        modalImgUpload.onchange = (event) => {
+        modalImgUpload.addEventListener("change", (event) => {
           const file = event.target.files[0];
           if (file) {
             const formData = new FormData();
@@ -365,7 +366,7 @@ function showRecipeView(recipe_id) {
                 );
               });
           }
-        };
+        });
       } else {
         img_path = `/api/recipe/img/${res["image_path"]}`;
         newRecipeModalImg.style.cursor = "default";
