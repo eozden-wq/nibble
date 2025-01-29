@@ -242,61 +242,6 @@ router.use("/img", express.static("server/data/recipe_imgs"));
 
 /**
  * @swagger
- *  /img/add:
- *    post:
- *      summary: Add an image to an existing recipe
- *      description: \!! IMPORTANT !! You need to pass the image in the form of a multi-part form data
- *      responses:
- *        "200":
- *          description: Image has been successfully added to the recipe
- *          schema:
- *            properties:
- *              code:
- *                type: integer
- *                example: 200
- *              message:
- *                type: string
- *                example: string
- *        "400":
- *          description: The recipe was not created due to the parameters not being given correctly
- *          schema:
- *            properties:
- *              code:
- *                type: integer
- *                example: 400
- *              message:
- *                type: string
- *                example: "Malformed request"
- *      parameters:
- *        - in: query
- *          name: id
- *          schema:
- *            type: integer
- *          description: The ID of the recipe the image should be added to
- *          required: true
- */
-router.post("/img/add", async (req, res) => {
-  upload(req, res, async (err) => {
-    try {
-      if (err) {
-        throw new Error(err);
-      }
-      streamer.edit(
-        req.query.id,
-        "image_path",
-        `recipe-${req.query.id}${path.extname(req.file.filename)}`
-      );
-      res.status(200);
-      res.json(json_response(200, "Success"));
-    } catch (err) {
-      res.status(400);
-      res.json(json_response(400, "Malformed request"));
-    }
-  });
-});
-
-/**
- * @swagger
  * /api/recipe/create:
  *  post:
  *      summary: Create a new recipe for people to view

@@ -321,58 +321,13 @@ function showRecipeView(recipe_id) {
       const recipeModalImg = document.getElementById("recipeModalImg");
       const modalImgUpload = document.getElementById("modalImgUpload");
 
-      // Clone the old recipeModalImage to newRecipeModalImg to remove all event listeners
-      recipeModalImg.replaceWith(recipeModalImg.cloneNode(true));
-      const newRecipeModalImg = document.getElementById("recipeModalImg");
-
       if (res["image_path"] === null) {
         img_path = "/imgs/404.webp";
-
-        newRecipeModalImg.style.cursor = "pointer";
-        newRecipeModalImg.addEventListener("click", () => {
-          modalImgUpload.click();
-        });
-
-        modalImgUpload.addEventListener("change", (event) => {
-          const file = event.target.files[0];
-          if (file) {
-            const formData = new FormData();
-            formData.append("recipe_img", file);
-
-            fetch(`/api/recipe/img/add?id=${recipe_id}`, {
-              method: "POST",
-              body: formData,
-            })
-              .then((res) => res.json())
-              .then((data) => {
-                if (data["code"] === 200) {
-                  const reader = new FileReader();
-                  reader.onload = function (e) {
-                    newRecipeModalImg.src = e.target.result;
-                  };
-                  reader.readAsDataURL(file);
-                } else {
-                  showAlert(
-                    "warning",
-                    "Something went wrong uploading the image."
-                  );
-                }
-              })
-              .catch((err) => {
-                console.error(err);
-                showAlert(
-                  "warning",
-                  "Problem contacting server while uploading the image."
-                );
-              });
-          }
-        });
       } else {
         img_path = `/api/recipe/img/${res["image_path"]}`;
-        newRecipeModalImg.style.cursor = "default";
       }
 
-      newRecipeModalImg.src = img_path;
+      recipeModalImg.src = img_path;
 
       const ingredientsList = document.getElementById("modalIngredientsList");
       ingredientsList.innerHTML = "";
