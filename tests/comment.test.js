@@ -67,10 +67,51 @@ describe("Testing Comment-related API Endpoints", () => {
       });
     });
 
-    test("api.comment.create should give a 200 response for a comment with a non-string message", () => {});
-    test("api.comment.create should give a 400 response for a comment with no specified id", () => {});
-    test("api.comment.create should give a 400 response for a comment with no message", () => {});
-    test("api.comment.create should give a 400 response for a comment with an empty message", () => {});
-    test("api.comment.create should give a 400 response for a comment with an invalid id", () => {});
+    test("api.comment.create should give a 200 response for a comment with a non-string message", async () => {
+      let response = await request(app)
+        .post("/api/comment/create")
+        .send({ recipe_id: 1, message: 1 })
+        .set("Accept", "application/json");
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toEqual({ code: 200, message: "Success" });
+    });
+    test("api.comment.create should give a 400 response for a comment with no specified id", async () => {
+      let response = await request(app)
+        .post("/api/comment/create")
+        .send({ message: "Haha! Look at me, I don't have a recipe!" })
+        .set("Accept", "application/json");
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toEqual({
+        code: 400,
+        message: "Malformed request",
+      });
+    });
+    test("api.comment.create should give a 400 response for a comment with no message", async () => {
+      let response = await request(app)
+        .post("/api/comment/create")
+        .send({ recipe_id: 3 })
+        .set("Accept", "application/json");
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toEqual({
+        code: 400,
+        message: "Malformed request",
+      });
+    });
+
+    test("api.comment.create should give a 400 response for a comment with an empty message", async () => {
+      let response = await request(app)
+        .post("/api/comment/create")
+        .send({ recipe_id: 3, message: "" })
+        .set("Accept", "application/json");
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toEqual({
+        code: 400,
+        message: "Malformed request",
+      });
+    });
   });
 });
