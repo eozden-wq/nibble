@@ -28,12 +28,19 @@ class CommentStreamer {
     }
   }
 
-  write(comment) {
+  write(comment, recipes_file) {
     try {
       if (!(comment instanceof Comment)) {
         throw TypeError;
       }
 
+      const recipes = fs.readFileSync(recipes_file, "utf-8");
+      let recipes_json = JSON.parse(recipes);
+
+      if (!recipes_json.some((recipe) => recipe.id === comment.recipe_id)) {
+        console.log("hit");
+        throw Error("This recipe doesn't exist!");
+      }
       this.comments.push(comment);
       fs.writeFileSync(this.comment_file, JSON.stringify(this.comments));
     } catch (err) {

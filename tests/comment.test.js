@@ -113,5 +113,18 @@ describe("Testing Comment-related API Endpoints", () => {
         message: "Malformed request",
       });
     });
+
+    test("api.comment.create should give a 400 response for a comment that corresponds to a non-existant recipe", async () => {
+      let response = await request(app)
+        .post("/api/comment/create")
+        .send({ recipe_id: 100000, message: "Haha! This one doesn't exist!" })
+        .set("Accept", "application/json");
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toEqual({
+        code: 400,
+        message: "Malformed request",
+      });
+    });
   });
 });

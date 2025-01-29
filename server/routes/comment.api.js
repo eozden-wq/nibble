@@ -104,7 +104,7 @@ router.post("/create", (req, res) => {
       abortEarly: false,
     });
     let comment = new Comment(valid_body);
-    streamer.write(comment);
+    streamer.write(comment, "./server/data/recipes.json");
     res.json({ code: 200, message: "Success" });
     res.end();
   } catch (err) {
