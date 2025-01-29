@@ -109,7 +109,6 @@ router.post("/create", (req, res) => {
     res.json({ code: 200, message: "Success" });
     res.end();
   } catch (err) {
-    console.error(err);
     res.status(400);
     res.json({ code: 400, message: "Malformed request" });
     res.end();
