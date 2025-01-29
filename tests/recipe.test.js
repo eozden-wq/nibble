@@ -236,7 +236,7 @@ describe("Testing Recipe-related API Endpoints", () => {
       expect(response.status).toBe(400);
       expect(response.body.message).toBe("Malformed request");
     });
-    test("api.recipe.craete should give a 400 response for an invalid recipe schema and a non-image file upload", async () => {
+    test("api.recipe.create should give a 400 response for an invalid recipe schema and a non-image file upload", async () => {
       let formData = new FormData();
       formData.append("json", JSON.stringify(invalid_data));
 
