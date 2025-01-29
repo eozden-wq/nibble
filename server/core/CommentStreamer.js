@@ -4,11 +4,8 @@ const Comment = require("./Comment");
 class CommentStreamer {
   constructor(comment_file) {
     this.comment_file = comment_file;
-    this.comments = [];
-    fs.readFile(comment_file, (err, data) => {
-      if (err) throw err;
-      this.comments = JSON.parse(data);
-    });
+    const file_data = fs.readFilySync(this.comment_file, "utf8");
+    this.comments = JSON.parse(file_data);
   }
 
   getAllComments(recipe_id) {
