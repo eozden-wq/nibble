@@ -60,7 +60,6 @@ router.get("/get", (req, res) => {
     res.status(200);
     return res.json(streamer.getAllComments(req.query.id));
   } catch (err) {
-    console.error(err);
     res.status(400);
     res.json({ code: 400, message: "Malformed request" });
   }
