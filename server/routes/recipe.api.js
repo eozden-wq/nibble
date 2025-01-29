@@ -275,20 +275,25 @@ router.use("/img", express.static("server/data/recipe_imgs"));
  *          description: The ID of the recipe the image should be added to
  *          required: true
  */
-router.post("/img/add", upload_edit.single("recipe_img"), (req, res) => {
-  try {
-    streamer.edit(
-      req.query.id,
-      "image_path",
-      `recipe-${req.query.id}${path.extname(req.file.filename)}`
-    );
-    res.status(200);
-    res.json(json_response(200, "Success"));
-  } catch (err) {
-    res.status(400);
-    console.log(err);
-    res.json(json_response(400, "Malformed request"));
-  }
+router.post("/img/add", async (req, res) => {
+  upload(req, res, async (err) => {
+    try {
+      if (err) {
+        throw new Error(err);
+      }
+      streamer.edit(
+        req.query.id,
+        "image_path",
+        `recipe-${req.query.id}${path.extname(req.file.filename)}`
+      );
+      res.status(200);
+      res.json(json_response(200, "Success"));
+    } catch (err) {
+      res.status(400);
+      console.log(err);
+      res.json(json_response(400, "Malformed request"));
+    }
+  });
 });
 
 /**
