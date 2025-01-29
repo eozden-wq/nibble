@@ -297,13 +297,13 @@ function submitComment(in_id) {
 function showRecipeView(recipe_id) {
   update_comments(recipe_id);
 
-  document
-    .getElementById("modalCommentForm")
-    .addEventListener("submit", (event) => {
-      event.preventDefault();
-      submitComment(recipe_id);
-    });
+  // Listen for comment submission
+  document.getElementById("modalCommentForm").onsubmit = (event) => {
+    event.preventDefault();
+    submitComment(recipe_id);
+  };
 
+  // Fetch the recipe data
   fetch(`/api/recipe/get?recipe_id=${recipe_id}`, {
     method: "GET",
     headers: { Accept: "application/json" },
@@ -313,72 +313,83 @@ function showRecipeView(recipe_id) {
       document.getElementById("cardModalTitle").textContent = res["dish_name"];
       document.getElementById("recipeModalDesc").textContent =
         res["description"];
-
-      let img_path = "/imgs/404.webp";
-      if (res["image_path"] !== null) {
-        img_path = `/api/recipe/img/${res["image_path"]}`;
-      } else {
-        document.getElementById("recipeModalImg").style.cursor = "pointer";
-        document
-          .getElementById("recipeModalImg")
-          .addEventListener("click", () => {
-            console.log("hit");
-            document.getElementById("modalImgUpload").click();
-          });
-
-        let form = document.getElementById("modalImgUploadForm");
-        let formData = new FormData(form);
-        let imgUpload = document.getElementById("modalImgUpload");
-        formData.append("recipe_img", imgUpload.files[0]);
-
-        console.log(formData);
-
-        fetch(`/api/recipe/img/add?id=${recipe_id}`, {
-          method: "POST",
-          Accept: "application/json",
-          body: formData,
-        })
-          .then((res) => res.json())
-          .then((res) => {
-            if (res["code"] === 200) {
-              const reader = new FileReader();
-              reader.readasDataURL(
-                document.getElementById("modalImgUpload").files[0]
-              );
-            }
-          })
-          .catch((err) =>
-            showAlert(
-              "warning",
-              "Hey, sorry about that, there seems to be a problem with our servers :)"
-            )
-          );
-      }
-      document.getElementById("recipeModalImg").src = img_path;
       document.getElementById(
         "recipeModalAuthor"
       ).textContent = `~ ${res["author"]}`;
 
-      document.getElementById("modalIngredientsList").innerHTML = "";
-      document.getElementById("modalInstructionsList").innerHTML = "";
+      let img_path = "";
+      const recipeModalImg = document.getElementById("recipeModalImg");
+      const modalImgUpload = document.getElementById("modalImgUpload");
 
-      for (const ingredient of res["ingredients"]) {
-        document.getElementById(
-          "modalIngredientsList"
-        ).innerHTML += `<li>${ingredient}</li>`;
+      recipeModalImg.replaceWith(recipeModalImg.cloneNode(true));
+      const newRecipeModalImg = document.getElementById("recipeModalImg");
+
+      if (res["image_path"] === null) {
+        img_path = "/imgs/404.webp";
+
+        newRecipeModalImg.style.cursor = "pointer";
+        newRecipeModalImg.addEventListener("click", () => {
+          modalImgUpload.click();
+        });
+
+        modalImgUpload.onchange = (event) => {
+          const file = event.target.files[0];
+          if (file) {
+            const formData = new FormData();
+            formData.append("recipe_img", file);
+
+            fetch(`/api/recipe/img/add?id=${recipe_id}`, {
+              method: "POST",
+              body: formData,
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data["code"] === 200) {
+                  const reader = new FileReader();
+                  reader.onload = function (e) {
+                    newRecipeModalImg.src = e.target.result;
+                  };
+                  reader.readAsDataURL(file);
+                } else {
+                  showAlert(
+                    "warning",
+                    "Something went wrong uploading the image."
+                  );
+                }
+              })
+              .catch((err) => {
+                console.error(err);
+                showAlert(
+                  "warning",
+                  "Problem contacting server while uploading the image."
+                );
+              });
+          }
+        };
+      } else {
+        img_path = `/api/recipe/img/${res["image_path"]}`;
+        newRecipeModalImg.style.cursor = "default";
       }
 
+      newRecipeModalImg.src = img_path;
+
+      const ingredientsList = document.getElementById("modalIngredientsList");
+      ingredientsList.innerHTML = "";
+      for (const ingredient of res["ingredients"]) {
+        ingredientsList.innerHTML += `<li>${ingredient}</li>`;
+      }
+
+      const instructionsList = document.getElementById("modalInstructionsList");
+      instructionsList.innerHTML = "";
       for (const instruction of res["instructions"]) {
-        document.getElementById(
-          "modalInstructionsList"
-        ).innerHTML += `<li>${instruction}</li>`;
+        instructionsList.innerHTML += `<li>${instruction}</li>`;
       }
 
       const modal = new bootstrap.Modal(document.getElementById("cardModal"));
       modal.show();
     })
     .catch((err) => {
-      console.log(err);
+      console.error(err);
       showAlert(
         "warning",
         "Hey, sorry about that, there seems to be a problem with our servers :)"
