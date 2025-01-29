@@ -52,5 +52,12 @@ describe("Testing Comment-related API Endpoints", () => {
         });
     });
   });
-  describe("POST /api/comment/create", () => {});
+  describe("POST /api/comment/create", () => {
+    test("api.comment.create should give a 200 response for a valid comment", () => {});
+    test("api.comment.create should give a 200 response for a comment with a non-string message", () => {});
+    test("api.comment.create should give a 400 response for a comment with no specified id", () => {});
+    test("api.comment.create should give a 400 response for a comment with no message", () => {});
+    test("api.comment.create should give a 400 response for a comment with an empty message", () => {});
+    test("api.comment.create should give a 400 response for a comment with an invalid id", () => {});
+  });
 });
