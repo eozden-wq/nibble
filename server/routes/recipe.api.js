@@ -31,11 +31,24 @@ const storage_edit = multer.diskStorage({
   },
 });
 
+const file_filter = (req, file, cb) => {
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/jpg"
+  ) {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid file type uploaded"), false);
+  }
+};
+
 const upload = multer({
-  storage: storage
-});
+  storage: storage,
+  fileFilter: file_filter,
+}).single("recipe_img");
 const upload_edit = multer({
-  storage: storage_edit
+  storage: storage_edit,
 });
 
 function json_response(code, message) {
@@ -327,29 +340,38 @@ router.post("/img/add", upload_edit.single("recipe_img"), (req, res) => {
  *                      items:
  *                          type: string
  */
-router.post("/create", upload.single("recipe_img"), async (req, res) => {
-  let recipe_data = JSON.parse(req.body["json"]);
-  try {
-    const valid_body = await createRecipeSchema.validate(recipe_data, {
-      abortEarly: false,
-    });
-    if (req.file === undefined) {
-      valid_body["image_path"] = null;
-    } else {
-      valid_body["image_path"] = `recipe-${streamer.get_size()}${path.extname(
-        req.file.originalname
-      )}`;
+router.post("/create", async (req, res) => {
+  upload(req, res, async (err) => {
+    try {
+      if (err) {
+        throw new Error("File upload is invalid");
+      }
+      let recipe_data;
+      try {
+        recipe_data = JSON.parse(req.body["json"]);
+        await createRecipeSchema.validate(recipe_data, { abortEarly: false });
+      } catch (validationError) {
+        return res.status(400).json(json_response(400, "Malformed request"));
+      }
+      if (req.file) {
+        recipe_data[
+          "image_path"
+        ] = `recipe-${streamer.get_size()}${path.extname(
+          req.file.originalname
+        )}`;
+      } else {
+        recipe_data["image_path"] = null;
+      }
+
+      const recipe = new Recipe(recipe_data);
+      streamer.write(recipe);
+
+      return res.status(200).json(json_response(200, "Success"));
+    } catch (err) {
+      console.error(err);
+      return res.status(400).json(json_response(400, "Malformed request"));
     }
-    let recipe = new Recipe(valid_body);
-    streamer.write(recipe);
-    res.json(json_response(200, "Success"));
-    res.end();
-  } catch (err) {
-    console.log(err);
-    res.status(400);
-    res.json(json_response(400, "Malformed request"));
-    res.end();
-  }
+  });
 });
 
 module.exports = router;
