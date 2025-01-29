@@ -290,7 +290,6 @@ router.post("/img/add", async (req, res) => {
       res.json(json_response(200, "Success"));
     } catch (err) {
       res.status(400);
-      console.log(err);
       res.json(json_response(400, "Malformed request"));
     }
   });

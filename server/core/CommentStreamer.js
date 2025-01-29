@@ -38,7 +38,6 @@ class CommentStreamer {
       let recipes_json = JSON.parse(recipes);
 
       if (!recipes_json.some((recipe) => recipe.id === comment.recipe_id)) {
-        console.log("hit");
         throw Error("This recipe doesn't exist!");
       }
       this.comments.push(comment);
