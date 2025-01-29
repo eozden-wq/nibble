@@ -20,7 +20,7 @@
       "salt",
       "pepper"
     ],
-    "image_path": null
+    "image_path": "recipe-0.jpg"
   },
   {
     "id": 1,
@@ -42,7 +42,7 @@
       "olive oil",
       "cheese"
     ],
-    "image_path": null
+    "image_path": "recipe-1.jpg"
   },
   {
     "id": 2,
@@ -63,7 +63,7 @@
       "basil leaves",
       "olive oil"
     ],
-    "image_path": null
+    "image_path": "recipe-2.jpg"
   },
   {
     "id": 3,
@@ -85,7 +85,7 @@
       "cheese",
       "salsa"
     ],
-    "image_path": null
+    "image_path": "recipe-3.jpg"
   },
   {
     "id": 4,
@@ -152,7 +152,7 @@
       "sour cream",
       "salsa"
     ],
-    "image_path": null
+    "image_path": "recipe-6.jpg"
   },
   {
     "id": 7,
